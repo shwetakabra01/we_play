@@ -1,19 +1,15 @@
 import '/auth/firebase_auth/auth_util.dart';
-import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/backend/schema/enums/enums.dart';
-import '/backend/schema/structs/index.dart';
 import '/components/location_set_widget.dart';
 import '/components/profile_bottom_sheet_widget.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_video_player.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
-import '/backend/schema/structs/index.dart';
-import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:badges/badges.dart' as badges;
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -62,8 +58,8 @@ class _HomeNavWidgetState extends State<HomeNavWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<List<VenueRecord>>(
-      stream: queryVenueRecord(),
+    return StreamBuilder<List<TeamsRecord>>(
+      stream: queryTeamsRecord(),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -82,7 +78,7 @@ class _HomeNavWidgetState extends State<HomeNavWidget> {
             ),
           );
         }
-        List<VenueRecord> homeNavVenueRecordList = snapshot.data!;
+        List<TeamsRecord> homeNavTeamsRecordList = snapshot.data!;
         return GestureDetector(
           onTap: () => _model.unfocusNode.canRequestFocus
               ? FocusScope.of(context).requestFocus(_model.unfocusNode)
@@ -312,545 +308,61 @@ class _HomeNavWidgetState extends State<HomeNavWidget> {
             ),
             body: SafeArea(
               top: true,
-              child: SingleChildScrollView(
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                10.0, 0.0, 0.0, 10.0),
-                            child: Text(
-                              'Games Nearby',
-                              style: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    fontFamily: 'Roboto',
-                                    color: Color(0xFF19191B),
-                                    fontSize: 16.0,
-                                    letterSpacing: 0.16,
-                                    fontWeight: FontWeight.w500,
-                                    lineHeight: 1.5,
-                                  ),
-                            ),
+              child: Container(
+                width: MediaQuery.sizeOf(context).width * 1.0,
+                height: MediaQuery.sizeOf(context).height * 1.0,
+                decoration: BoxDecoration(),
+                child: Padding(
+                  padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Container(
+                          width: MediaQuery.sizeOf(context).width * 1.0,
+                          height: 200.0,
+                          decoration: BoxDecoration(
+                            color: FlutterFlowTheme.of(context)
+                                .secondaryBackground,
                           ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 10.0, 10.0),
-                            child: FFButtonWidget(
-                              onPressed: () async {
-                                context.pushNamed(
-                                  'Play',
-                                  queryParameters: {
-                                    'filterEvents': serializeParam(
-                                      'Games Nearby',
-                                      ParamType.String,
-                                    ),
-                                    'showBack': serializeParam(
-                                      true,
-                                      ParamType.bool,
-                                    ),
-                                  }.withoutNulls,
-                                );
-                              },
-                              text: 'View All',
-                              options: FFButtonOptions(
-                                width: 70.0,
-                                height: 30.0,
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    2.0, 0.0, 2.0, 0.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: FlutterFlowTheme.of(context)
-                                    .primaryBackground,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .labelMedium
-                                    .override(
-                                      fontFamily: 'Roboto',
-                                      color: Colors.black,
-                                      letterSpacing: 0.0,
-                                    ),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 150.0,
-                      decoration: BoxDecoration(),
-                      child: FutureBuilder<ApiCallResponse>(
-                        future: WePlayApiGroup.getMyEventsCall.call(
-                          futureEvents: true,
-                          organizer: false,
-                          mySports: true,
-                          jwtToken: currentJwtToken,
                         ),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return Center(
-                              child: SizedBox(
-                                width: 50.0,
-                                height: 50.0,
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    FlutterFlowTheme.of(context).primary,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                          final listViewGetMyEventsResponse = snapshot.data!;
-                          return Builder(
-                            builder: (context) {
-                              final eventsWoRecs =
-                                  ((listViewGetMyEventsResponse.jsonBody
-                                                      .toList()
-                                                      .map<EventWoStruct?>(
-                                                          EventWoStruct
-                                                              .maybeFromMap)
-                                                      .toList()
-                                                  as Iterable<EventWoStruct?>)
-                                              .withoutNulls
-                                              ?.toList() ??
-                                          [])
-                                      .take(2)
-                                      .toList();
-                              return ListView.builder(
-                                padding: EdgeInsets.zero,
-                                primary: false,
-                                scrollDirection: Axis.horizontal,
-                                itemCount: eventsWoRecs.length,
-                                itemBuilder: (context, eventsWoRecsIndex) {
-                                  final eventsWoRecsItem =
-                                      eventsWoRecs[eventsWoRecsIndex];
-                                  return Align(
-                                    alignment: AlignmentDirectional(0.0, 0.0),
-                                    child: Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          10.0, 0.0, 10.0, 0.0),
-                                      child: Container(
-                                        width: 220.0,
-                                        height: 150.0,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .lineColor,
-                                          borderRadius:
-                                              BorderRadius.circular(20.0),
-                                        ),
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 5.0),
-                                          child: InkWell(
-                                            splashColor: Colors.transparent,
-                                            focusColor: Colors.transparent,
-                                            hoverColor: Colors.transparent,
-                                            highlightColor: Colors.transparent,
-                                            onTap: () async {
-                                              _model.eventsForRef =
-                                                  await queryEventsRecordOnce(
-                                                queryBuilder: (eventsRecord) =>
-                                                    eventsRecord
-                                                        .where(
-                                                          'status',
-                                                          isEqualTo:
-                                                              eventsWoRecsItem
-                                                                  .status,
-                                                        )
-                                                        .where(
-                                                          'name',
-                                                          isEqualTo:
-                                                              eventsWoRecsItem
-                                                                  .name,
-                                                        )
-                                                        .where(
-                                                          'sport',
-                                                          isEqualTo:
-                                                              eventsWoRecsItem
-                                                                  .sport,
-                                                        )
-                                                        .where(
-                                                          'date',
-                                                          isGreaterThan:
-                                                              getCurrentTimestamp,
-                                                        ),
-                                              );
-
-                                              context.pushNamed(
-                                                'GameInfo',
-                                                queryParameters: {
-                                                  'eventRef': serializeParam(
-                                                    _model.eventsForRef
-                                                        ?.where((e) =>
-                                                            e.reference.id ==
-                                                            eventsWoRecsItem
-                                                                .eventId)
-                                                        .toList()
-                                                        ?.first
-                                                        ?.reference,
-                                                    ParamType.DocumentReference,
-                                                  ),
-                                                }.withoutNulls,
-                                              );
-
-                                              setState(() {});
-                                            },
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceBetween,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      children: [
-                                                        if ((eventsWoRecsItem
-                                                                    .participants
-                                                                    .where((e) =>
-                                                                        e.userRef ==
-                                                                        currentUserReference
-                                                                            ?.id)
-                                                                    .toList()
-                                                                    .length >
-                                                                0) &&
-                                                            (eventsWoRecsItem
-                                                                    .participants
-                                                                    .where((e) =>
-                                                                        e.userRef ==
-                                                                        currentUserReference
-                                                                            ?.id)
-                                                                    .toList()
-                                                                    .first
-                                                                    .status ==
-                                                                'WL') &&
-                                                            (MediaQuery.sizeOf(
-                                                                        context)
-                                                                    .height ==
-                                                                1.0))
-                                                          Align(
-                                                            alignment:
-                                                                AlignmentDirectional(
-                                                                    -1.0, -1.0),
-                                                            child: Padding(
-                                                              padding:
-                                                                  EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                          10.0,
-                                                                          10.0,
-                                                                          0.0,
-                                                                          0.0),
-                                                              child: Text(
-                                                                'In wait list',
-                                                                style: FlutterFlowTheme.of(
-                                                                        context)
-                                                                    .titleMedium
-                                                                    .override(
-                                                                      fontFamily:
-                                                                          'Roboto',
-                                                                      color: Colors
-                                                                          .black,
-                                                                      fontSize:
-                                                                          14.0,
-                                                                      letterSpacing:
-                                                                          0.0,
-                                                                    ),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                ),
-                                                Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: [
-                                                    Expanded(
-                                                      child: Container(
-                                                        width:
-                                                            MediaQuery.sizeOf(
-                                                                        context)
-                                                                    .width *
-                                                                1.0,
-                                                        height: 100.0,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          image:
-                                                              DecorationImage(
-                                                            fit: BoxFit.cover,
-                                                            image:
-                                                                Image.network(
-                                                              homeNavVenueRecordList
-                                                                  .where((e) =>
-                                                                      e.reference
-                                                                          .id ==
-                                                                      eventsWoRecsItem
-                                                                          .venue)
-                                                                  .toList()
-                                                                  .first
-                                                                  .photos
-                                                                  .first,
-                                                            ).image,
-                                                          ),
-                                                          borderRadius:
-                                                              BorderRadius.only(
-                                                            bottomLeft:
-                                                                Radius.circular(
-                                                                    0.0),
-                                                            bottomRight:
-                                                                Radius.circular(
-                                                                    0.0),
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    20.0),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    20.0),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                Align(
-                                                  alignment:
-                                                      AlignmentDirectional(
-                                                          -1.0, 1.0),
-                                                  child: Column(
-                                                    mainAxisSize:
-                                                        MainAxisSize.max,
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.end,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    10.0,
-                                                                    0.0,
-                                                                    0.0,
-                                                                    2.0),
-                                                        child: Text(
-                                                          '${eventsWoRecsItem.name}, ${eventsWoRecsItem.location}',
-                                                          textAlign:
-                                                              TextAlign.start,
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .titleMedium
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Roboto',
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 12.0,
-                                                                letterSpacing:
-                                                                    0.6,
-                                                                lineHeight:
-                                                                    1.25,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            EdgeInsetsDirectional
-                                                                .fromSTEB(
-                                                                    10.0,
-                                                                    0.0,
-                                                                    0.0,
-                                                                    10.0),
-                                                        child: Text(
-                                                          '${((int participants, int? numberOfGuests) {
-                                                            return numberOfGuests ==
-                                                                    null
-                                                                ? participants
-                                                                : (numberOfGuests +
-                                                                    participants);
-                                                          }(eventsWoRecsItem.participants.length, eventsWoRecsItem.numberOfGuests)).toString()} / ${eventsWoRecsItem.playersCapacity.toString()} Joined - ${dateTimeFormat('EEE,MMM d,h:mm a', functions.parseDate(eventsWoRecsItem.date))}',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Roboto Condensed',
-                                                                color: Colors
-                                                                    .black,
-                                                                fontSize: 10.0,
-                                                                letterSpacing:
-                                                                    0.0,
-                                                              ),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 5.0),
+                          child: StreamBuilder<List<TeamEventsRecord>>(
+                            stream: queryTeamEventsRecord(
+                              queryBuilder: (teamEventsRecord) =>
+                                  teamEventsRecord.orderBy('eventDate'),
+                            ),
+                            builder: (context, snapshot) {
+                              // Customize what your widget looks like when it's loading.
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: SizedBox(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        FlutterFlowTheme.of(context).primary,
                                       ),
                                     ),
-                                  );
-                                },
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                10.0, 0.0, 0.0, 0.0),
-                            child: Text(
-                              'Upcoming Games',
-                              style: FlutterFlowTheme.of(context)
-                                  .titleSmall
-                                  .override(
-                                    fontFamily: 'Roboto',
-                                    color: Color(0xFF19191B),
-                                    fontSize: 16.0,
-                                    letterSpacing: 0.16,
-                                    fontWeight: FontWeight.w500,
-                                    lineHeight: 1.5,
                                   ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 0.0, 10.0, 10.0),
-                            child: FFButtonWidget(
-                              onPressed: () async {
-                                context.pushNamed(
-                                  'Play',
-                                  queryParameters: {
-                                    'filterEvents': serializeParam(
-                                      'Upcoming Games',
-                                      ParamType.String,
-                                    ),
-                                    'showBack': serializeParam(
-                                      true,
-                                      ParamType.bool,
-                                    ),
-                                  }.withoutNulls,
                                 );
-                              },
-                              text: 'View All',
-                              options: FFButtonOptions(
-                                width: 70.0,
-                                height: 30.0,
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    2.0, 0.0, 2.0, 0.0),
-                                iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 0.0),
-                                color: FlutterFlowTheme.of(context)
-                                    .primaryBackground,
-                                textStyle: FlutterFlowTheme.of(context)
-                                    .labelMedium
-                                    .override(
-                                      fontFamily: 'Roboto',
-                                      color: Colors.black,
-                                      letterSpacing: 0.0,
-                                    ),
-                                borderRadius: BorderRadius.circular(8.0),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      width: MediaQuery.sizeOf(context).width * 1.0,
-                      height: 140.0,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                      ),
-                      child: FutureBuilder<List<EventsRecord>>(
-                        future: queryEventsRecordOnce(
-                          queryBuilder: (eventsRecord) => eventsRecord
-                              .where(
-                                'date',
-                                isGreaterThan: getCurrentTimestamp,
-                              )
-                              .where(
-                                'participantsRefs',
-                                arrayContains: currentUserReference,
-                              )
-                              .where(
-                                'status',
-                                isEqualTo: FFAppConstants.InProgress,
-                              )
-                              .orderBy('date'),
-                          limit: 2,
-                        ),
-                        builder: (context, snapshot) {
-                          // Customize what your widget looks like when it's loading.
-                          if (!snapshot.hasData) {
-                            return Center(
-                              child: SizedBox(
-                                width: 50.0,
-                                height: 50.0,
-                                child: CircularProgressIndicator(
-                                  valueColor: AlwaysStoppedAnimation<Color>(
-                                    FlutterFlowTheme.of(context).primary,
-                                  ),
-                                ),
-                              ),
-                            );
-                          }
-                          List<EventsRecord> listViewEventsRecordList =
-                              snapshot.data!;
-                          return ListView.builder(
-                            padding: EdgeInsets.zero,
-                            primary: false,
-                            scrollDirection: Axis.vertical,
-                            itemCount: listViewEventsRecordList.length,
-                            itemBuilder: (context, listViewIndex) {
-                              final listViewEventsRecord =
-                                  listViewEventsRecordList[listViewIndex];
-                              return Visibility(
-                                visible: functions.userPresentInEvent(
-                                    listViewEventsRecord,
-                                    currentUserReference!),
-                                child: Container(
-                                  width: MediaQuery.sizeOf(context).width * 1.0,
-                                  height: 70.0,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      width: 1.0,
-                                    ),
-                                  ),
-                                  child: Padding(
+                              }
+                              List<TeamEventsRecord>
+                                  listViewTeamEventsRecordList = snapshot.data!;
+                              return ListView.builder(
+                                padding: EdgeInsets.zero,
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                itemCount: listViewTeamEventsRecordList.length,
+                                itemBuilder: (context, listViewIndex) {
+                                  final listViewTeamEventsRecord =
+                                      listViewTeamEventsRecordList[
+                                          listViewIndex];
+                                  return Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(
-                                        10.0, 0.0, 0.0, 0.0),
+                                        0.0, 10.0, 0.0, 0.0),
                                     child: InkWell(
                                       splashColor: Colors.transparent,
                                       focusColor: Colors.transparent,
@@ -858,124 +370,488 @@ class _HomeNavWidgetState extends State<HomeNavWidget> {
                                       highlightColor: Colors.transparent,
                                       onTap: () async {
                                         context.pushNamed(
-                                          'GameInfo',
+                                          'FixtureDetails',
                                           queryParameters: {
-                                            'eventRef': serializeParam(
-                                              listViewEventsRecord.reference,
+                                            'fixtureRef': serializeParam(
+                                              listViewTeamEventsRecord
+                                                  .reference,
                                               ParamType.DocumentReference,
                                             ),
+                                            'team1': serializeParam(
+                                              homeNavTeamsRecordList
+                                                  .where((e) =>
+                                                      e.reference ==
+                                                      listViewTeamEventsRecord
+                                                          .team1)
+                                                  .toList()
+                                                  .first,
+                                              ParamType.Document,
+                                            ),
+                                            'team2': serializeParam(
+                                              homeNavTeamsRecordList
+                                                  .where((e) =>
+                                                      e.reference ==
+                                                      listViewTeamEventsRecord
+                                                          .team2)
+                                                  .toList()
+                                                  .first,
+                                              ParamType.Document,
+                                            ),
                                           }.withoutNulls,
+                                          extra: <String, dynamic>{
+                                            'team1': homeNavTeamsRecordList
+                                                .where((e) =>
+                                                    e.reference ==
+                                                    listViewTeamEventsRecord
+                                                        .team1)
+                                                .toList()
+                                                .first,
+                                            'team2': homeNavTeamsRecordList
+                                                .where((e) =>
+                                                    e.reference ==
+                                                    listViewTeamEventsRecord
+                                                        .team2)
+                                                .toList()
+                                                .first,
+                                          },
                                         );
                                       },
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            '${listViewEventsRecord.name}, ${listViewEventsRecord.location}',
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Roboto',
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryText,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
+                                      child: Container(
+                                        width:
+                                            MediaQuery.sizeOf(context).width *
+                                                1.0,
+                                        constraints: BoxConstraints(
+                                          minHeight: 100.0,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondaryBackground,
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                          border: Border.all(
+                                            color: FlutterFlowTheme.of(context)
+                                                .accent3,
                                           ),
-                                          Text(
-                                            dateTimeFormat('EEE, MMM d, h:mm a',
-                                                listViewEventsRecord.date!),
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily:
-                                                      'Roboto Condensed',
-                                                  color: Colors.black,
-                                                  letterSpacing: 0.0,
-                                                  fontWeight: FontWeight.normal,
+                                        ),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        20.0, 0.0, 0.0, 0.0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  5.0),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          if (homeNavTeamsRecordList
+                                                                      .where((e) =>
+                                                                          e.reference ==
+                                                                          listViewTeamEventsRecord
+                                                                              .team1)
+                                                                      .toList()
+                                                                      .first
+                                                                      .teamIcon !=
+                                                                  null &&
+                                                              homeNavTeamsRecordList
+                                                                      .where((e) =>
+                                                                          e.reference ==
+                                                                          listViewTeamEventsRecord
+                                                                              .team1)
+                                                                      .toList()
+                                                                      .first
+                                                                      .teamIcon !=
+                                                                  '')
+                                                            Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          15.0,
+                                                                          0.0),
+                                                              child: ClipRRect(
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            8.0),
+                                                                child: Image
+                                                                    .network(
+                                                                  homeNavTeamsRecordList
+                                                                      .where((e) =>
+                                                                          e.reference ==
+                                                                          listViewTeamEventsRecord
+                                                                              .team1)
+                                                                      .toList()
+                                                                      .first
+                                                                      .teamIcon,
+                                                                  width: 30.0,
+                                                                  height: 30.0,
+                                                                  fit: BoxFit
+                                                                      .contain,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          if (homeNavTeamsRecordList
+                                                                      .where((e) =>
+                                                                          e.reference ==
+                                                                          listViewTeamEventsRecord
+                                                                              .team1)
+                                                                      .toList()
+                                                                      .first
+                                                                      .teamIcon ==
+                                                                  null ||
+                                                              homeNavTeamsRecordList
+                                                                      .where((e) =>
+                                                                          e.reference ==
+                                                                          listViewTeamEventsRecord
+                                                                              .team1)
+                                                                      .toList()
+                                                                      .first
+                                                                      .teamIcon ==
+                                                                  '')
+                                                            Padding(
+                                                              padding:
+                                                                  EdgeInsetsDirectional
+                                                                      .fromSTEB(
+                                                                          0.0,
+                                                                          0.0,
+                                                                          15.0,
+                                                                          0.0),
+                                                              child: Icon(
+                                                                Icons
+                                                                    .question_mark,
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryBackground,
+                                                                size: 30.0,
+                                                              ),
+                                                            ),
+                                                          Text(
+                                                            homeNavTeamsRecordList
+                                                                .where((e) =>
+                                                                    e.reference ==
+                                                                    listViewTeamEventsRecord
+                                                                        .team1)
+                                                                .toList()
+                                                                .first
+                                                                .name,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .labelLarge
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        if (homeNavTeamsRecordList
+                                                                    .where((e) =>
+                                                                        e.reference ==
+                                                                        listViewTeamEventsRecord
+                                                                            .team2)
+                                                                    .toList()
+                                                                    .first
+                                                                    .teamIcon !=
+                                                                null &&
+                                                            homeNavTeamsRecordList
+                                                                    .where((e) =>
+                                                                        e.reference ==
+                                                                        listViewTeamEventsRecord
+                                                                            .team2)
+                                                                    .toList()
+                                                                    .first
+                                                                    .teamIcon !=
+                                                                '')
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        0.0,
+                                                                        0.0,
+                                                                        15.0,
+                                                                        0.0),
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .only(
+                                                                bottomLeft: Radius
+                                                                    .circular(
+                                                                        0.0),
+                                                                bottomRight: Radius
+                                                                    .circular(
+                                                                        0.0),
+                                                                topLeft: Radius
+                                                                    .circular(
+                                                                        0.0),
+                                                                topRight: Radius
+                                                                    .circular(
+                                                                        0.0),
+                                                              ),
+                                                              child:
+                                                                  Image.network(
+                                                                homeNavTeamsRecordList
+                                                                    .where((e) =>
+                                                                        e.reference ==
+                                                                        listViewTeamEventsRecord
+                                                                            .team2)
+                                                                    .toList()
+                                                                    .first
+                                                                    .teamIcon,
+                                                                width: 30.0,
+                                                                height: 30.0,
+                                                                fit: BoxFit
+                                                                    .contain,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        if (homeNavTeamsRecordList
+                                                                    .where((e) =>
+                                                                        e.reference ==
+                                                                        listViewTeamEventsRecord
+                                                                            .team2)
+                                                                    .toList()
+                                                                    .first
+                                                                    .teamIcon ==
+                                                                null ||
+                                                            homeNavTeamsRecordList
+                                                                    .where((e) =>
+                                                                        e.reference ==
+                                                                        listViewTeamEventsRecord
+                                                                            .team2)
+                                                                    .toList()
+                                                                    .first
+                                                                    .teamIcon ==
+                                                                '')
+                                                          Padding(
+                                                            padding:
+                                                                EdgeInsetsDirectional
+                                                                    .fromSTEB(
+                                                                        0.0,
+                                                                        0.0,
+                                                                        15.0,
+                                                                        0.0),
+                                                            child: Icon(
+                                                              Icons
+                                                                  .question_mark,
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .secondaryBackground,
+                                                              size: 30.0,
+                                                            ),
+                                                          ),
+                                                        Text(
+                                                          homeNavTeamsRecordList
+                                                              .where((e) =>
+                                                                  e.reference ==
+                                                                  listViewTeamEventsRecord
+                                                                      .team2)
+                                                              .toList()
+                                                              .first
+                                                              .name,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .labelLarge
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                letterSpacing:
+                                                                    0.0,
+                                                              ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
                                                 ),
-                                          ),
-                                        ],
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 30.0,
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.rectangle,
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        0.0, 0.0, 10.0, 0.0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  10.0),
+                                                      child: Text(
+                                                        listViewTeamEventsRecord
+                                                            .goals
+                                                            .where((e) =>
+                                                                e.team ==
+                                                                listViewTeamEventsRecord
+                                                                    .team1)
+                                                            .toList()
+                                                            .length
+                                                            .toString(),
+                                                        style:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .labelLarge
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                ),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      listViewTeamEventsRecord
+                                                          .goals
+                                                          .where((e) =>
+                                                              e.team ==
+                                                              listViewTeamEventsRecord
+                                                                  .team2)
+                                                          .toList()
+                                                          .length
+                                                          .toString(),
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .labelLarge
+                                                          .override(
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            letterSpacing: 0.0,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              height: 100.0,
+                                              child: VerticalDivider(
+                                                width: 20.0,
+                                                thickness: 2.0,
+                                                indent: 12.0,
+                                                endIndent: 12.0,
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .accent4,
+                                              ),
+                                            ),
+                                            Container(
+                                              width: 120.0,
+                                              decoration: BoxDecoration(),
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        10.0, 0.0, 10.0, 0.0),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Text(
+                                                      'FT',
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .labelLarge
+                                                          .override(
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            letterSpacing: 0.0,
+                                                          ),
+                                                    ),
+                                                    Text(
+                                                      dateTimeFormat(
+                                                          'MMMEd',
+                                                          listViewTeamEventsRecord
+                                                              .eventDate!),
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .labelLarge
+                                                          .override(
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            letterSpacing: 0.0,
+                                                          ),
+                                                    ),
+                                                    if (listViewTeamEventsRecord
+                                                        .videos.isNotEmpty)
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    5.0,
+                                                                    0.0,
+                                                                    5.0),
+                                                        child:
+                                                            FlutterFlowVideoPlayer(
+                                                          path:
+                                                              listViewTeamEventsRecord
+                                                                  .videos.first,
+                                                          videoType:
+                                                              VideoType.network,
+                                                          width: 90.0,
+                                                          height: 60.0,
+                                                          autoPlay: false,
+                                                          looping: true,
+                                                          showControls: true,
+                                                          allowFullScreen: true,
+                                                          allowPlaybackSpeedMenu:
+                                                              false,
+                                                        ),
+                                                      ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                ),
+                                  );
+                                },
                               );
                             },
-                          );
-                        },
-                      ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Opacity(
-                            opacity: 0.4,
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  10.0, 0.0, 0.0, 0.0),
-                              child: Text(
-                                'My Groups',
-                                style: FlutterFlowTheme.of(context)
-                                    .titleSmall
-                                    .override(
-                                      fontFamily: 'Roboto',
-                                      color: FlutterFlowTheme.of(context)
-                                          .primaryText,
-                                      letterSpacing: 0.0,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                              ),
-                            ),
                           ),
-                          Opacity(
-                            opacity: 0.4,
-                            child: Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 10.0, 0.0),
-                              child: FFButtonWidget(
-                                onPressed: () {
-                                  print('Button pressed ...');
-                                },
-                                text: 'View All',
-                                options: FFButtonOptions(
-                                  width: 70.0,
-                                  height: 30.0,
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      2.0, 0.0, 2.0, 0.0),
-                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 0.0, 0.0, 0.0),
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  textStyle: FlutterFlowTheme.of(context)
-                                      .labelMedium
-                                      .override(
-                                        fontFamily: 'Roboto',
-                                        color: Colors.black,
-                                        letterSpacing: 0.0,
-                                      ),
-                                  elevation: 0.0,
-                                  borderSide: BorderSide(
-                                    width: 0.0,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ),
             ),

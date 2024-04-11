@@ -175,7 +175,7 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                                         DefaultTextStyle.merge(
                                                       softWrap: true,
                                                       child: Text(
-                                                        'Team 1',
+                                                        'Match Details',
                                                         style:
                                                             FlutterFlowTheme.of(
                                                                     context)
@@ -192,7 +192,7 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                                         MediaQuery.sizeOf(
                                                                     context)
                                                                 .width *
-                                                            0.2,
+                                                            0.5,
                                                   ),
                                                   DataColumn2(
                                                     label:
@@ -216,7 +216,7 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                                         MediaQuery.sizeOf(
                                                                     context)
                                                                 .width *
-                                                            0.2,
+                                                            0.0,
                                                   ),
                                                   DataColumn2(
                                                     label:
@@ -240,7 +240,7 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                                         MediaQuery.sizeOf(
                                                                     context)
                                                                 .width *
-                                                            0.25,
+                                                            0.0,
                                                     onSort: onSortChanged,
                                                   ),
                                                   DataColumn2(
@@ -265,7 +265,7 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                                         MediaQuery.sizeOf(
                                                                     context)
                                                                 .width *
-                                                            0.2,
+                                                            0.25,
                                                   ),
                                                   DataColumn2(
                                                     label:
@@ -289,7 +289,7 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                                         MediaQuery.sizeOf(
                                                                     context)
                                                                 .width *
-                                                            0.05,
+                                                            0.1,
                                                   ),
                                                 ],
                                                 dataRowBuilder:
@@ -309,23 +309,50 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                                             .primaryBackground,
                                                   ),
                                                   cells: [
-                                                    Text(
-                                                      fixturesTeamsRecordList
-                                                          .where((e) =>
-                                                              e.reference.id ==
-                                                              teamEventRecsItem
-                                                                  .team1?.id)
-                                                          .toList()
-                                                          .first
-                                                          .name,
-                                                      style: FlutterFlowTheme
-                                                              .of(context)
-                                                          .labelLarge
-                                                          .override(
-                                                            fontFamily:
-                                                                'Roboto',
-                                                            letterSpacing: 0.0,
+                                                    Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Text(
+                                                          '${fixturesTeamsRecordList.where((e) => e.reference.id == teamEventRecsItem.team1?.id).toList().first.name} vs ${fixturesTeamsRecordList.where((e) => e.reference.id == teamEventRecsItem.team2?.id).toList().first.name}',
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .labelLarge
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                letterSpacing:
+                                                                    0.0,
+                                                              ),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              EdgeInsetsDirectional
+                                                                  .fromSTEB(
+                                                                      0.0,
+                                                                      4.0,
+                                                                      0.0,
+                                                                      0.0),
+                                                          child: Text(
+                                                            'On ${dateTimeFormat('d/M h:mm a', teamEventRecsItem.eventDate)}',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .labelLarge
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Roboto',
+                                                                  letterSpacing:
+                                                                      0.0,
+                                                                ),
                                                           ),
+                                                        ),
+                                                      ],
                                                     ),
                                                     Text(
                                                       fixturesTeamsRecordList
@@ -566,6 +593,11 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                       builder: (context) {
                                         final teams =
                                             fixturesTeamsRecordList.toList();
+                                        if (teams.isEmpty) {
+                                          return Image.asset(
+                                            'assets/images/no_data.png',
+                                          );
+                                        }
                                         return FlutterFlowDataTable<
                                             TeamsRecord>(
                                           controller: _model
@@ -590,23 +622,16 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                             DataColumn2(
                                               label: DefaultTextStyle.merge(
                                                 softWrap: true,
-                                                child: Text(
-                                                  'Team Owner',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .labelLarge
-                                                      .override(
-                                                        fontFamily: 'Roboto',
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                                ),
+                                                child: Container(),
                                               ),
+                                              fixedWidth: 0.0,
                                             ),
                                             DataColumn2(
                                               label: DefaultTextStyle.merge(
                                                 softWrap: true,
                                                 child: Text(
                                                   'Team Size',
+                                                  textAlign: TextAlign.center,
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .labelLarge
@@ -616,12 +641,13 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                                       ),
                                                 ),
                                               ),
+                                              fixedWidth: 90.0,
                                             ),
                                             DataColumn2(
                                               label: DefaultTextStyle.merge(
                                                 softWrap: true,
                                                 child: Text(
-                                                  'Won',
+                                                  'W',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .labelLarge
@@ -631,12 +657,13 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                                       ),
                                                 ),
                                               ),
+                                              fixedWidth: 50.0,
                                             ),
                                             DataColumn2(
                                               label: DefaultTextStyle.merge(
                                                 softWrap: true,
                                                 child: Text(
-                                                  'Lost',
+                                                  'L',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .labelLarge
@@ -646,12 +673,13 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                                       ),
                                                 ),
                                               ),
+                                              fixedWidth: 50.0,
                                             ),
                                             DataColumn2(
                                               label: DefaultTextStyle.merge(
                                                 softWrap: true,
                                                 child: Text(
-                                                  'Draw',
+                                                  'D',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .labelLarge
@@ -661,6 +689,7 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                                       ),
                                                 ),
                                               ),
+                                              fixedWidth: 50.0,
                                             ),
                                           ],
                                           dataRowBuilder: (teamsItem,
@@ -724,6 +753,7 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                               Text(
                                                 teamsItem.members.length
                                                     .toString(),
+                                                textAlign: TextAlign.center,
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .labelLarge
@@ -763,6 +793,9 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                                         ),
                                               ),
                                             ].map((c) => DataCell(c)).toList(),
+                                          ),
+                                          emptyBuilder: () => Image.asset(
+                                            'assets/images/no_data.png',
                                           ),
                                           paginated: false,
                                           selectable: false,

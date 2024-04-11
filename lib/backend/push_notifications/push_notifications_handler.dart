@@ -180,6 +180,7 @@ final parametersBuilderMap =
               data, 'teamP', TeamsRecord.fromSnapshot),
         },
       ),
+  'HomeNavCopy': ParameterData.none(),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

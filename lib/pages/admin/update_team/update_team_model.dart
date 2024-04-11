@@ -72,9 +72,8 @@ class UpdateTeamModel extends FlutterFlowModel<UpdateTeamWidget> {
   TextEditingController? drawTxtController;
   String? Function(BuildContext, String?)? drawTxtControllerValidator;
   bool isDataUploading1 = false;
-  FFUploadedFile uploadedLocalFile1 =
-      FFUploadedFile(bytes: Uint8List.fromList([]));
-  String uploadedFileUrl1 = '';
+  List<FFUploadedFile> uploadedLocalFiles1 = [];
+  List<String> uploadedFileUrls1 = [];
 
   bool isDataUploading2 = false;
   FFUploadedFile uploadedLocalFile2 =

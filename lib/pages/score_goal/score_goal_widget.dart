@@ -92,7 +92,7 @@ class _ScoreGoalWidgetState extends State<ScoreGoalWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Update ${widget.titleText}',
+                        'Update ${widget.titleText}${widget.titleText}',
                         textAlign: TextAlign.center,
                         style: FlutterFlowTheme.of(context).labelLarge.override(
                               fontFamily: 'Roboto',

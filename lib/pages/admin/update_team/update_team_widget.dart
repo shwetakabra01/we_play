@@ -662,7 +662,7 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                       controller:
                                           _model.userRoleValueController ??=
                                               FormFieldController<String>(null),
-                                      options: ['Captain', 'Member'],
+                                      options: ['GK', 'DEF', 'MID', 'FWD'],
                                       onChanged: (val) => setState(
                                           () => _model.userRoleValue = val),
                                       width: 300.0,
@@ -1470,10 +1470,11 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                       hoverColor: Colors.transparent,
                                       highlightColor: Colors.transparent,
                                       onTap: () async {
-                                        final selectedMedia =
-                                            await selectMediaWithSourceBottomSheet(
-                                          context: context,
-                                          allowPhoto: true,
+                                        // uploadImg
+                                        final selectedMedia = await selectMedia(
+                                          includeBlurHash: true,
+                                          mediaSource: MediaSource.photoGallery,
+                                          multiImage: true,
                                         );
                                         if (selectedMedia != null &&
                                             selectedMedia.every((m) =>
@@ -1486,6 +1487,11 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
 
                                           var downloadUrls = <String>[];
                                           try {
+                                            showUploadMessage(
+                                              context,
+                                              'Uploading file...',
+                                              showLoading: true,
+                                            );
                                             selectedUploadedFiles =
                                                 selectedMedia
                                                     .map((m) => FFUploadedFile(
@@ -1511,6 +1517,8 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                                 .map((u) => u!)
                                                 .toList();
                                           } finally {
+                                            ScaffoldMessenger.of(context)
+                                                .hideCurrentSnackBar();
                                             _model.isDataUploading1 = false;
                                           }
                                           if (selectedUploadedFiles.length ==
@@ -1518,13 +1526,17 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                               downloadUrls.length ==
                                                   selectedMedia.length) {
                                             setState(() {
-                                              _model.uploadedLocalFile1 =
-                                                  selectedUploadedFiles.first;
-                                              _model.uploadedFileUrl1 =
-                                                  downloadUrls.first;
+                                              _model.uploadedLocalFiles1 =
+                                                  selectedUploadedFiles;
+                                              _model.uploadedFileUrls1 =
+                                                  downloadUrls;
                                             });
+                                            showUploadMessage(
+                                                context, 'Success!');
                                           } else {
                                             setState(() {});
+                                            showUploadMessage(context,
+                                                'Failed to upload data');
                                             return;
                                           }
                                         }
@@ -1760,7 +1772,7 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                     ...mapToFirestore(
                                       {
                                         'images': FieldValue.arrayUnion(
-                                            [_model.uploadedFileUrl1]),
+                                            [_model.uploadedFileUrls1]),
                                         'videos': FieldValue.arrayUnion(
                                             [_model.uploadedFileUrl2]),
                                       },

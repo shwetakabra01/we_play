@@ -13,7 +13,7 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 
 class WePlayApiGroup {
   static String baseUrl =
-      'https://us-central1-play-e84eb.cloudfunctions.net/wePlayApi/api/';
+      'https://us-central1-playprod-2b863.cloudfunctions.net/wePlayApi/api/';
   static Map<String, String> headers = {
     'Authorization': 'Bearer [jwt_token]',
   };

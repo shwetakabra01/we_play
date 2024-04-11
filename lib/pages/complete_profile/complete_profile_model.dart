@@ -18,6 +18,7 @@ class CompleteProfileModel extends FlutterFlowModel<CompleteProfileWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
+  final formKey = GlobalKey<FormState>();
   bool isDataUploading = false;
   FFUploadedFile uploadedLocalFile =
       FFUploadedFile(bytes: Uint8List.fromList([]));
@@ -27,10 +28,36 @@ class CompleteProfileModel extends FlutterFlowModel<CompleteProfileWidget> {
   FocusNode? emailtxtFocusNode;
   TextEditingController? emailtxtController;
   String? Function(BuildContext, String?)? emailtxtControllerValidator;
+  String? _emailtxtControllerValidator(BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Field is required';
+    }
+
+    if (!RegExp(kTextValidatorEmailRegex).hasMatch(val)) {
+      return 'Email is incorrect. ';
+    }
+    return null;
+  }
+
   // State field(s) for displayName widget.
   FocusNode? displayNameFocusNode;
   TextEditingController? displayNameController;
   String? Function(BuildContext, String?)? displayNameControllerValidator;
+  String? _displayNameControllerValidator(BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Enter your name';
+    }
+
+    if (val.length < 1) {
+      return 'Requires at least 1 characters.';
+    }
+    if (val.length > 50) {
+      return 'Maximum characters are 50';
+    }
+
+    return null;
+  }
+
   // State field(s) for ChoiceChips widget.
   FormFieldController<List<String>>? choiceChipsValueController;
   List<String>? get choiceChipsValues => choiceChipsValueController?.value;
@@ -38,7 +65,10 @@ class CompleteProfileModel extends FlutterFlowModel<CompleteProfileWidget> {
       choiceChipsValueController?.value = val;
 
   @override
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    emailtxtControllerValidator = _emailtxtControllerValidator;
+    displayNameControllerValidator = _displayNameControllerValidator;
+  }
 
   @override
   void dispose() {

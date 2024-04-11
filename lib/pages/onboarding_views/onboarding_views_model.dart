@@ -12,6 +12,7 @@ class OnboardingViewsModel extends FlutterFlowModel<OnboardingViewsWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
+  final formKey = GlobalKey<FormState>();
   // State field(s) for PageView widget.
   PageController? pageViewController;
 
@@ -24,13 +25,37 @@ class OnboardingViewsModel extends FlutterFlowModel<OnboardingViewsWidget> {
   FocusNode? phoneNumberFocusNode;
   TextEditingController? phoneNumberController;
   String? Function(BuildContext, String?)? phoneNumberControllerValidator;
+  String? _phoneNumberControllerValidator(BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Mobile Number is required';
+    }
+
+    if (val.length > 10) {
+      return 'Maximum 10 characters allowed, currently ${val.length}.';
+    }
+    if (!RegExp('\\d{10}').hasMatch(val)) {
+      return 'Invalid mobile number';
+    }
+    return null;
+  }
+
   // State field(s) for optText widget.
   FocusNode? optTextFocusNode;
   TextEditingController? optTextController;
   String? Function(BuildContext, String?)? optTextControllerValidator;
+  String? _optTextControllerValidator(BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'OTP is required';
+    }
+
+    return null;
+  }
 
   @override
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    phoneNumberControllerValidator = _phoneNumberControllerValidator;
+    optTextControllerValidator = _optTextControllerValidator;
+  }
 
   @override
   void dispose() {

@@ -19,3 +19,4 @@ export '/pages/admin/update_team/update_team_widget.dart' show UpdateTeamWidget;
 export '/pages/fixture_details/fixture_details_widget.dart'
     show FixtureDetailsWidget;
 export '/pages/team_details/team_details_widget.dart' show TeamDetailsWidget;
+export '/home_nav_copy/home_nav_copy_widget.dart' show HomeNavCopyWidget;

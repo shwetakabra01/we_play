@@ -23,6 +23,7 @@ class OnboardingViewsLoggedInModel
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
+  final formKey = GlobalKey<FormState>();
   // State field(s) for PageView widget.
   PageController? pageViewController;
 
@@ -35,10 +36,36 @@ class OnboardingViewsLoggedInModel
   FocusNode? emailIdFocusNode;
   TextEditingController? emailIdController;
   String? Function(BuildContext, String?)? emailIdControllerValidator;
+  String? _emailIdControllerValidator(BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Email is required';
+    }
+
+    if (!RegExp(kTextValidatorEmailRegex).hasMatch(val)) {
+      return 'Invalid email';
+    }
+    return null;
+  }
+
   // State field(s) for fullName widget.
   FocusNode? fullNameFocusNode;
   TextEditingController? fullNameController;
   String? Function(BuildContext, String?)? fullNameControllerValidator;
+  String? _fullNameControllerValidator(BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Name is required';
+    }
+
+    if (val.length < 1) {
+      return 'Requires at least 1 characters.';
+    }
+    if (val.length > 50) {
+      return 'Maximum characters limit reached';
+    }
+
+    return null;
+  }
+
   // State field(s) for genderSelect widget.
   FormFieldController<List<String>>? genderSelectValueController;
   String? get genderSelectValue =>
@@ -54,7 +81,10 @@ class OnboardingViewsLoggedInModel
   ApiCallResponse? area;
 
   @override
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    emailIdControllerValidator = _emailIdControllerValidator;
+    fullNameControllerValidator = _fullNameControllerValidator;
+  }
 
   @override
   void dispose() {

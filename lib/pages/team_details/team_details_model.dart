@@ -2,6 +2,7 @@ import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_video_player.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'team_details_widget.dart' show TeamDetailsWidget;
 import 'package:expandable/expandable.dart';
@@ -10,11 +11,23 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
 class TeamDetailsModel extends FlutterFlowModel<TeamDetailsWidget> {
+  ///  Local state fields for this page.
+
+  bool imageView = false;
+
+  String? imagePath;
+
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
   // State field(s) for Expandable widget.
-  late ExpandableController expandableController;
+  late ExpandableController expandableController1;
+
+  // State field(s) for Expandable widget.
+  late ExpandableController expandableController2;
+
+  // State field(s) for Expandable widget.
+  late ExpandableController expandableController3;
 
   @override
   void initState(BuildContext context) {}
@@ -22,6 +35,8 @@ class TeamDetailsModel extends FlutterFlowModel<TeamDetailsWidget> {
   @override
   void dispose() {
     unfocusNode.dispose();
-    expandableController.dispose();
+    expandableController1.dispose();
+    expandableController2.dispose();
+    expandableController3.dispose();
   }
 }

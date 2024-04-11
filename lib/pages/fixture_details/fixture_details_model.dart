@@ -1,11 +1,14 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/backend/firebase_storage/storage.dart';
 import '/backend/schema/enums/enums.dart';
+import '/backend/schema/structs/index.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_timer.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/upload_data.dart';
 import '/pages/score_goal/score_goal_widget.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'fixture_details_widget.dart' show FixtureDetailsWidget;
@@ -28,6 +31,11 @@ class FixtureDetailsModel extends FlutterFlowModel<FixtureDetailsWidget> {
   final unfocusNode = FocusNode();
   // Stores action output result for [Backend Call - Read Document] action in FixtureDetails widget.
   TeamEventsRecord? document;
+  // State field(s) for TabBar widget.
+  TabController? tabBarController;
+  int get tabBarCurrentIndex =>
+      tabBarController != null ? tabBarController!.index : 0;
+
   // State field(s) for Timer widget.
   int timerMilliseconds = 0;
   String timerValue = StopWatchTimer.getDisplayTime(
@@ -42,6 +50,14 @@ class FixtureDetailsModel extends FlutterFlowModel<FixtureDetailsWidget> {
   String? tt;
   // Stores action output result for [Alert Dialog - Custom Dialog] action in Text widget.
   String? tt2;
+  bool isDataUploading1 = false;
+  List<FFUploadedFile> uploadedLocalFiles1 = [];
+  List<String> uploadedFileUrls1 = [];
+
+  bool isDataUploading2 = false;
+  FFUploadedFile uploadedLocalFile2 =
+      FFUploadedFile(bytes: Uint8List.fromList([]));
+  String uploadedFileUrl2 = '';
 
   @override
   void initState(BuildContext context) {}
@@ -49,6 +65,7 @@ class FixtureDetailsModel extends FlutterFlowModel<FixtureDetailsWidget> {
   @override
   void dispose() {
     unfocusNode.dispose();
+    tabBarController?.dispose();
     timerController.dispose();
   }
 }
