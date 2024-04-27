@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'onboarding_views_model.dart';
@@ -42,11 +43,11 @@ class _OnboardingViewsWidgetState extends State<OnboardingViewsWidget> {
       }
     });
 
-    _model.phoneNumberController ??= TextEditingController();
+    _model.phoneNumberTextController ??= TextEditingController();
     _model.phoneNumberFocusNode ??= FocusNode();
 
     authManager.handlePhoneAuthStateChanges(context);
-    _model.optTextController ??= TextEditingController();
+    _model.optTextTextController ??= TextEditingController();
     _model.optTextFocusNode ??= FocusNode();
   }
 
@@ -70,7 +71,7 @@ class _OnboardingViewsWidgetState extends State<OnboardingViewsWidget> {
           decoration: BoxDecoration(),
           child: Form(
             key: _model.formKey,
-            autovalidateMode: AutovalidateMode.disabled,
+            autovalidateMode: AutovalidateMode.always,
             child: Container(
               width: double.infinity,
               height: double.infinity,
@@ -229,7 +230,7 @@ class _OnboardingViewsWidgetState extends State<OnboardingViewsWidget> {
                                             8.0, 0.0, 8.0, 0.0),
                                         child: TextFormField(
                                           controller:
-                                              _model.phoneNumberController,
+                                              _model.phoneNumberTextController,
                                           focusNode:
                                               _model.phoneNumberFocusNode,
                                           autofocus: true,
@@ -311,10 +312,17 @@ class _OnboardingViewsWidgetState extends State<OnboardingViewsWidget> {
                                                 fontFamily: 'Roboto',
                                                 letterSpacing: 0.0,
                                               ),
-                                          minLines: null,
+                                          maxLength: 10,
+                                          maxLengthEnforcement:
+                                              MaxLengthEnforcement.enforced,
+                                          buildCounter: (context,
+                                                  {required currentLength,
+                                                  required isFocused,
+                                                  maxLength}) =>
+                                              null,
                                           keyboardType: TextInputType.number,
                                           validator: _model
-                                              .phoneNumberControllerValidator
+                                              .phoneNumberTextControllerValidator
                                               .asValidator(context),
                                         ),
                                       ),
@@ -330,8 +338,12 @@ class _OnboardingViewsWidgetState extends State<OnboardingViewsWidget> {
                               5.0, 0.0, 5.0, 5.0),
                           child: FFButtonWidget(
                             onPressed: () async {
+                              if (_model.formKey.currentState == null ||
+                                  !_model.formKey.currentState!.validate()) {
+                                return;
+                              }
                               final phoneNumberVal =
-                                  '+91${_model.phoneNumberController.text}';
+                                  '+91${_model.phoneNumberTextController.text}';
                               if (phoneNumberVal == null ||
                                   phoneNumberVal.isEmpty ||
                                   !phoneNumberVal.startsWith('+')) {
@@ -352,7 +364,7 @@ class _OnboardingViewsWidgetState extends State<OnboardingViewsWidget> {
                                     context.mounted,
                                     queryParameters: {
                                       'mobileNumber': serializeParam(
-                                        '+91${_model.phoneNumberController.text}',
+                                        '+91${_model.phoneNumberTextController.text}',
                                         ParamType.String,
                                       ),
                                     }.withoutNulls,
@@ -423,7 +435,7 @@ class _OnboardingViewsWidgetState extends State<OnboardingViewsWidget> {
                                   padding: EdgeInsetsDirectional.fromSTEB(
                                       8.0, 0.0, 8.0, 0.0),
                                   child: TextFormField(
-                                    controller: _model.optTextController,
+                                    controller: _model.optTextTextController,
                                     focusNode: _model.optTextFocusNode,
                                     autofocus: true,
                                     obscureText: false,
@@ -494,9 +506,9 @@ class _OnboardingViewsWidgetState extends State<OnboardingViewsWidget> {
                                           fontFamily: 'Roboto',
                                           letterSpacing: 0.0,
                                         ),
-                                    minLines: null,
                                     keyboardType: TextInputType.number,
-                                    validator: _model.optTextControllerValidator
+                                    validator: _model
+                                        .optTextTextControllerValidator
                                         .asValidator(context),
                                   ),
                                 ),
@@ -510,7 +522,8 @@ class _OnboardingViewsWidgetState extends State<OnboardingViewsWidget> {
                           child: FFButtonWidget(
                             onPressed: () async {
                               GoRouter.of(context).prepareAuthEvent();
-                              final smsCodeVal = _model.optTextController.text;
+                              final smsCodeVal =
+                                  _model.optTextTextController.text;
                               if (smsCodeVal == null || smsCodeVal.isEmpty) {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(

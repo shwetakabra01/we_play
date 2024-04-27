@@ -11,8 +11,10 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/flutter_flow/upload_data.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'update_team_widget.dart' show UpdateTeamWidget;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -39,18 +41,32 @@ class UpdateTeamModel extends FlutterFlowModel<UpdateTeamWidget> {
   final unfocusNode = FocusNode();
   // State field(s) for userName widget.
   FocusNode? userNameFocusNode;
-  TextEditingController? userNameController;
-  String? Function(BuildContext, String?)? userNameControllerValidator;
+  TextEditingController? userNameTextController;
+  String? Function(BuildContext, String?)? userNameTextControllerValidator;
   // State field(s) for phone_number widget.
   FocusNode? phoneNumberFocusNode;
-  TextEditingController? phoneNumberController;
-  String? Function(BuildContext, String?)? phoneNumberControllerValidator;
+  TextEditingController? phoneNumberTextController;
+  String? Function(BuildContext, String?)? phoneNumberTextControllerValidator;
   // State field(s) for genderSelect widget.
   FormFieldController<List<String>>? genderSelectValueController;
   String? get genderSelectValue =>
       genderSelectValueController?.value?.firstOrNull;
   set genderSelectValue(String? val) =>
       genderSelectValueController?.value = val != null ? [val] : [];
+  // State field(s) for emailId widget.
+  FocusNode? emailIdFocusNode;
+  TextEditingController? emailIdTextController;
+  String? Function(BuildContext, String?)? emailIdTextControllerValidator;
+  // State field(s) for instagramId widget.
+  FocusNode? instagramIdFocusNode;
+  TextEditingController? instagramIdTextController;
+  String? Function(BuildContext, String?)? instagramIdTextControllerValidator;
+  DateTime? datePicked;
+  bool isDataUploading1 = false;
+  FFUploadedFile uploadedLocalFile1 =
+      FFUploadedFile(bytes: Uint8List.fromList([]));
+  String uploadedFileUrl1 = '';
+
   // Stores action output result for [Backend Call - API (Create User)] action in Button widget.
   ApiCallResponse? apiResponse;
   // State field(s) for userDd widget.
@@ -61,24 +77,30 @@ class UpdateTeamModel extends FlutterFlowModel<UpdateTeamWidget> {
   FormFieldController<String>? userRoleValueController;
   // State field(s) for wonTxt widget.
   FocusNode? wonTxtFocusNode;
-  TextEditingController? wonTxtController;
-  String? Function(BuildContext, String?)? wonTxtControllerValidator;
+  TextEditingController? wonTxtTextController;
+  String? Function(BuildContext, String?)? wonTxtTextControllerValidator;
   // State field(s) for LostTxt widget.
   FocusNode? lostTxtFocusNode;
-  TextEditingController? lostTxtController;
-  String? Function(BuildContext, String?)? lostTxtControllerValidator;
+  TextEditingController? lostTxtTextController;
+  String? Function(BuildContext, String?)? lostTxtTextControllerValidator;
   // State field(s) for drawTxt widget.
   FocusNode? drawTxtFocusNode;
-  TextEditingController? drawTxtController;
-  String? Function(BuildContext, String?)? drawTxtControllerValidator;
-  bool isDataUploading1 = false;
-  List<FFUploadedFile> uploadedLocalFiles1 = [];
-  List<String> uploadedFileUrls1 = [];
-
+  TextEditingController? drawTxtTextController;
+  String? Function(BuildContext, String?)? drawTxtTextControllerValidator;
   bool isDataUploading2 = false;
   FFUploadedFile uploadedLocalFile2 =
       FFUploadedFile(bytes: Uint8List.fromList([]));
   String uploadedFileUrl2 = '';
+
+  bool isDataUploading3 = false;
+  FFUploadedFile uploadedLocalFile3 =
+      FFUploadedFile(bytes: Uint8List.fromList([]));
+  String uploadedFileUrl3 = '';
+
+  bool isDataUploading4 = false;
+  FFUploadedFile uploadedLocalFile4 =
+      FFUploadedFile(bytes: Uint8List.fromList([]));
+  String uploadedFileUrl4 = '';
 
   @override
   void initState(BuildContext context) {}
@@ -87,18 +109,24 @@ class UpdateTeamModel extends FlutterFlowModel<UpdateTeamWidget> {
   void dispose() {
     unfocusNode.dispose();
     userNameFocusNode?.dispose();
-    userNameController?.dispose();
+    userNameTextController?.dispose();
 
     phoneNumberFocusNode?.dispose();
-    phoneNumberController?.dispose();
+    phoneNumberTextController?.dispose();
+
+    emailIdFocusNode?.dispose();
+    emailIdTextController?.dispose();
+
+    instagramIdFocusNode?.dispose();
+    instagramIdTextController?.dispose();
 
     wonTxtFocusNode?.dispose();
-    wonTxtController?.dispose();
+    wonTxtTextController?.dispose();
 
     lostTxtFocusNode?.dispose();
-    lostTxtController?.dispose();
+    lostTxtTextController?.dispose();
 
     drawTxtFocusNode?.dispose();
-    drawTxtController?.dispose();
+    drawTxtTextController?.dispose();
   }
 }

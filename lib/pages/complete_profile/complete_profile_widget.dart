@@ -32,10 +32,11 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
     super.initState();
     _model = createModel(context, () => CompleteProfileModel());
 
-    _model.emailtxtController ??= TextEditingController(text: currentUserEmail);
+    _model.emailtxtTextController ??=
+        TextEditingController(text: currentUserEmail);
     _model.emailtxtFocusNode ??= FocusNode();
 
-    _model.displayNameController ??=
+    _model.displayNameTextController ??=
         TextEditingController(text: currentUserDisplayName);
     _model.displayNameFocusNode ??= FocusNode();
   }
@@ -341,7 +342,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         8.0, 0.0, 8.0, 0.0),
                                     child: TextFormField(
-                                      controller: _model.emailtxtController,
+                                      controller: _model.emailtxtTextController,
                                       focusNode: _model.emailtxtFocusNode,
                                       autofocus: true,
                                       obscureText: false,
@@ -405,9 +406,8 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                                 .secondaryText,
                                             letterSpacing: 0.0,
                                           ),
-                                      minLines: null,
                                       validator: _model
-                                          .emailtxtControllerValidator
+                                          .emailtxtTextControllerValidator
                                           .asValidator(context),
                                     ),
                                   ),
@@ -449,7 +449,7 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                     child: AuthUserStreamWidget(
                                       builder: (context) => TextFormField(
                                         controller:
-                                            _model.displayNameController,
+                                            _model.displayNameTextController,
                                         focusNode: _model.displayNameFocusNode,
                                         autofocus: true,
                                         obscureText: false,
@@ -520,9 +520,8 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                                       .secondaryText,
                                               letterSpacing: 0.0,
                                             ),
-                                        minLines: null,
                                         validator: _model
-                                            .displayNameControllerValidator
+                                            .displayNameTextControllerValidator
                                             .asValidator(context),
                                       ),
                                     ),
@@ -696,9 +695,9 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                                 _model.uploadedFileUrl != '') {
                               await currentUserReference!.update({
                                 ...createUsersRecordData(
-                                  email: _model.emailtxtController.text,
+                                  email: _model.emailtxtTextController.text,
                                   displayName:
-                                      _model.displayNameController.text,
+                                      _model.displayNameTextController.text,
                                   photoUrl: _model.uploadedFileUrl,
                                 ),
                                 ...mapToFirestore(
@@ -710,9 +709,9 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
                             } else {
                               await currentUserReference!.update({
                                 ...createUsersRecordData(
-                                  email: _model.emailtxtController.text,
+                                  email: _model.emailtxtTextController.text,
                                   displayName:
-                                      _model.displayNameController.text,
+                                      _model.displayNameTextController.text,
                                 ),
                                 ...mapToFirestore(
                                   {

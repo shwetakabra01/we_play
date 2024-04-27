@@ -11,7 +11,9 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import '/flutter_flow/upload_data.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -52,21 +54,27 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
       });
     });
 
-    _model.userNameController ??= TextEditingController();
+    _model.userNameTextController ??= TextEditingController();
     _model.userNameFocusNode ??= FocusNode();
 
-    _model.phoneNumberController ??= TextEditingController();
+    _model.phoneNumberTextController ??= TextEditingController();
     _model.phoneNumberFocusNode ??= FocusNode();
 
-    _model.wonTxtController ??=
+    _model.emailIdTextController ??= TextEditingController();
+    _model.emailIdFocusNode ??= FocusNode();
+
+    _model.instagramIdTextController ??= TextEditingController();
+    _model.instagramIdFocusNode ??= FocusNode();
+
+    _model.wonTxtTextController ??=
         TextEditingController(text: widget.team?.won?.toString());
     _model.wonTxtFocusNode ??= FocusNode();
 
-    _model.lostTxtController ??=
+    _model.lostTxtTextController ??=
         TextEditingController(text: widget.team?.lost?.toString());
     _model.lostTxtFocusNode ??= FocusNode();
 
-    _model.drawTxtController ??=
+    _model.drawTxtTextController ??=
         TextEditingController(text: widget.team?.draw?.toString());
     _model.drawTxtFocusNode ??= FocusNode();
   }
@@ -81,10 +89,7 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<UsersRecord>>(
-      stream: queryUsersRecord(
-        queryBuilder: (usersRecord) => usersRecord.whereNotIn(
-            'uid', widget.team?.memberRefs?.map((e) => e.id).toList()),
-      ),
+      stream: queryUsersRecord(),
       builder: (context, snapshot) {
         // Customize what your widget looks like when it's loading.
         if (!snapshot.hasData) {
@@ -173,7 +178,7 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 10.0, 0.0),
                                     child: Text(
-                                      'User Name',
+                                      'Full Name',
                                       style: FlutterFlowTheme.of(context)
                                           .labelLarge
                                           .override(
@@ -187,7 +192,8 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           8.0, 0.0, 8.0, 0.0),
                                       child: TextFormField(
-                                        controller: _model.userNameController,
+                                        controller:
+                                            _model.userNameTextController,
                                         focusNode: _model.userNameFocusNode,
                                         autofocus: true,
                                         obscureText: false,
@@ -255,9 +261,8 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                               fontFamily: 'Roboto',
                                               letterSpacing: 0.0,
                                             ),
-                                        minLines: null,
                                         validator: _model
-                                            .userNameControllerValidator
+                                            .userNameTextControllerValidator
                                             .asValidator(context),
                                       ),
                                     ),
@@ -277,7 +282,7 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                     padding: EdgeInsetsDirectional.fromSTEB(
                                         0.0, 0.0, 10.0, 0.0),
                                     child: Text(
-                                      'User Number',
+                                      'Mobile',
                                       style: FlutterFlowTheme.of(context)
                                           .labelLarge
                                           .override(
@@ -301,7 +306,7 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                           8.0, 0.0, 8.0, 0.0),
                                       child: TextFormField(
                                         controller:
-                                            _model.phoneNumberController,
+                                            _model.phoneNumberTextController,
                                         focusNode: _model.phoneNumberFocusNode,
                                         autofocus: true,
                                         obscureText: false,
@@ -369,9 +374,8 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                               fontFamily: 'Roboto',
                                               letterSpacing: 0.0,
                                             ),
-                                        minLines: null,
                                         validator: _model
-                                            .phoneNumberControllerValidator
+                                            .phoneNumberTextControllerValidator
                                             .asValidator(context),
                                       ),
                                     ),
@@ -407,8 +411,10 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                         options: [
                                           ChipData(
                                               'Male', FontAwesomeIcons.male),
+                                          ChipData('Female',
+                                              FontAwesomeIcons.female),
                                           ChipData(
-                                              'Female', FontAwesomeIcons.female)
+                                              'Other', Icons.transgender_sharp)
                                         ],
                                         onChanged: (val) => setState(() =>
                                             _model.genderSelectValue =
@@ -421,7 +427,7 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                                   context)
                                               .bodyMedium
                                               .override(
-                                                fontFamily: 'Playfair Display',
+                                                fontFamily: 'Roboto',
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .primaryText,
@@ -443,7 +449,7 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                                   context)
                                               .bodyMedium
                                               .override(
-                                                fontFamily: 'Playfair Display',
+                                                fontFamily: 'Roboto',
                                                 color:
                                                     FlutterFlowTheme.of(context)
                                                         .secondaryText,
@@ -492,60 +498,572 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                             ),
                             Padding(
                               padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 10.0, 0.0, 0.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 10.0, 0.0),
+                                    child: Text(
+                                      'Email Id',
+                                      style: FlutterFlowTheme.of(context)
+                                          .labelLarge
+                                          .override(
+                                            fontFamily: 'Roboto',
+                                            letterSpacing: 0.0,
+                                          ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          8.0, 0.0, 8.0, 0.0),
+                                      child: TextFormField(
+                                        controller:
+                                            _model.emailIdTextController,
+                                        focusNode: _model.emailIdFocusNode,
+                                        autofocus: true,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .override(
+                                                    fontFamily: 'Roboto',
+                                                    letterSpacing: 0.0,
+                                                  ),
+                                          hintText: 'Enter Email...',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .override(
+                                                    fontFamily: 'Roboto',
+                                                    letterSpacing: 0.0,
+                                                  ),
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          errorBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .error,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          focusedErrorBorder:
+                                              UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .error,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .labelLarge
+                                            .override(
+                                              fontFamily: 'Roboto',
+                                              letterSpacing: 0.0,
+                                            ),
+                                        validator: _model
+                                            .emailIdTextControllerValidator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 10.0, 0.0, 0.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 10.0, 0.0),
+                                    child: Text(
+                                      'Instaram Id',
+                                      style: FlutterFlowTheme.of(context)
+                                          .labelLarge
+                                          .override(
+                                            fontFamily: 'Roboto',
+                                            letterSpacing: 0.0,
+                                          ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          8.0, 0.0, 8.0, 0.0),
+                                      child: TextFormField(
+                                        controller:
+                                            _model.instagramIdTextController,
+                                        focusNode: _model.instagramIdFocusNode,
+                                        autofocus: true,
+                                        obscureText: false,
+                                        decoration: InputDecoration(
+                                          labelStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .override(
+                                                    fontFamily: 'Roboto',
+                                                    letterSpacing: 0.0,
+                                                  ),
+                                          hintText: 'Enter Id...',
+                                          hintStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .labelMedium
+                                                  .override(
+                                                    fontFamily: 'Roboto',
+                                                    letterSpacing: 0.0,
+                                                  ),
+                                          enabledBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .alternate,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          focusedBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primary,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          errorBorder: UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .error,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                          focusedErrorBorder:
+                                              UnderlineInputBorder(
+                                            borderSide: BorderSide(
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .error,
+                                              width: 2.0,
+                                            ),
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                          ),
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .labelLarge
+                                            .override(
+                                              fontFamily: 'Roboto',
+                                              letterSpacing: 0.0,
+                                            ),
+                                        validator: _model
+                                            .instagramIdTextControllerValidator
+                                            .asValidator(context),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 10.0, 0.0, 10.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 10.0, 0.0),
+                                    child: Text(
+                                      'Date Of Birth',
+                                      style: FlutterFlowTheme.of(context)
+                                          .labelLarge
+                                          .override(
+                                            fontFamily: 'Roboto',
+                                            letterSpacing: 0.0,
+                                          ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 0.0, 10.0, 0.0),
+                                          child: Text(
+                                            _model.datePicked != null
+                                                ? dateTimeFormat(
+                                                    'yMMMd', _model.datePicked)
+                                                : 'Select Date',
+                                            style: FlutterFlowTheme.of(context)
+                                                .labelLarge
+                                                .override(
+                                                  fontFamily: 'Roboto',
+                                                  letterSpacing: 0.0,
+                                                ),
+                                          ),
+                                        ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  10.0, 0.0, 0.0, 0.0),
+                                          child: InkWell(
+                                            splashColor: Colors.transparent,
+                                            focusColor: Colors.transparent,
+                                            hoverColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            onTap: () async {
+                                              final _datePickedDate =
+                                                  await showDatePicker(
+                                                context: context,
+                                                initialDate:
+                                                    getCurrentTimestamp,
+                                                firstDate: DateTime(1900),
+                                                lastDate: getCurrentTimestamp,
+                                                builder: (context, child) {
+                                                  return wrapInMaterialDatePickerTheme(
+                                                    context,
+                                                    child!,
+                                                    headerBackgroundColor:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .primary,
+                                                    headerForegroundColor:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .info,
+                                                    headerTextStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .headlineLarge
+                                                            .override(
+                                                              fontFamily:
+                                                                  'Roboto',
+                                                              fontSize: 32.0,
+                                                              letterSpacing:
+                                                                  0.0,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w600,
+                                                            ),
+                                                    pickerBackgroundColor:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .secondaryBackground,
+                                                    pickerForegroundColor:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .primaryText,
+                                                    selectedDateTimeBackgroundColor:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .primary,
+                                                    selectedDateTimeForegroundColor:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .info,
+                                                    actionButtonForegroundColor:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .primaryText,
+                                                    iconSize: 24.0,
+                                                  );
+                                                },
+                                              );
+
+                                              if (_datePickedDate != null) {
+                                                safeSetState(() {
+                                                  _model.datePicked = DateTime(
+                                                    _datePickedDate.year,
+                                                    _datePickedDate.month,
+                                                    _datePickedDate.day,
+                                                  );
+                                                });
+                                              }
+                                            },
+                                            child: Icon(
+                                              Icons.calendar_month,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  0.0, 10.0, 0.0, 10.0),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 0.0, 10.0, 0.0),
+                                    child: Text(
+                                      'Profile picture',
+                                      style: FlutterFlowTheme.of(context)
+                                          .labelLarge
+                                          .override(
+                                            fontFamily: 'Roboto',
+                                            letterSpacing: 0.0,
+                                          ),
+                                    ),
+                                  ),
+                                  Expanded(
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      children: [
+                                        if (_model.uploadedFileUrl1 != null &&
+                                            _model.uploadedFileUrl1 != '')
+                                          Container(
+                                            width: 40.0,
+                                            height: 40.0,
+                                            clipBehavior: Clip.antiAlias,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                            ),
+                                            child: Image.network(
+                                              _model.uploadedFileUrl1,
+                                              fit: BoxFit.cover,
+                                            ),
+                                          ),
+                                        Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  10.0, 0.0, 0.0, 0.0),
+                                          child: InkWell(
+                                            splashColor: Colors.transparent,
+                                            focusColor: Colors.transparent,
+                                            hoverColor: Colors.transparent,
+                                            highlightColor: Colors.transparent,
+                                            onTap: () async {
+                                              final selectedMedia =
+                                                  await selectMediaWithSourceBottomSheet(
+                                                context: context,
+                                                allowPhoto: true,
+                                              );
+                                              if (selectedMedia != null &&
+                                                  selectedMedia.every((m) =>
+                                                      validateFileFormat(
+                                                          m.storagePath,
+                                                          context))) {
+                                                setState(() => _model
+                                                    .isDataUploading1 = true);
+                                                var selectedUploadedFiles =
+                                                    <FFUploadedFile>[];
+
+                                                var downloadUrls = <String>[];
+                                                try {
+                                                  selectedUploadedFiles =
+                                                      selectedMedia
+                                                          .map((m) =>
+                                                              FFUploadedFile(
+                                                                name: m
+                                                                    .storagePath
+                                                                    .split('/')
+                                                                    .last,
+                                                                bytes: m.bytes,
+                                                                height: m
+                                                                    .dimensions
+                                                                    ?.height,
+                                                                width: m
+                                                                    .dimensions
+                                                                    ?.width,
+                                                                blurHash:
+                                                                    m.blurHash,
+                                                              ))
+                                                          .toList();
+
+                                                  downloadUrls =
+                                                      (await Future.wait(
+                                                    selectedMedia.map(
+                                                      (m) async =>
+                                                          await uploadData(
+                                                              m.storagePath,
+                                                              m.bytes),
+                                                    ),
+                                                  ))
+                                                          .where(
+                                                              (u) => u != null)
+                                                          .map((u) => u!)
+                                                          .toList();
+                                                } finally {
+                                                  _model.isDataUploading1 =
+                                                      false;
+                                                }
+                                                if (selectedUploadedFiles
+                                                            .length ==
+                                                        selectedMedia.length &&
+                                                    downloadUrls.length ==
+                                                        selectedMedia.length) {
+                                                  setState(() {
+                                                    _model.uploadedLocalFile1 =
+                                                        selectedUploadedFiles
+                                                            .first;
+                                                    _model.uploadedFileUrl1 =
+                                                        downloadUrls.first;
+                                                  });
+                                                } else {
+                                                  setState(() {});
+                                                  return;
+                                                }
+                                              }
+                                            },
+                                            child: Icon(
+                                              Icons.upload_sharp,
+                                              color:
+                                                  FlutterFlowTheme.of(context)
+                                                      .primaryText,
+                                              size: 24.0,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
                                   5.0, 10.0, 5.0, 30.0),
                               child: FFButtonWidget(
-                                onPressed: () async {
-                                  _model.apiResponse =
-                                      await WePlayApiGroup.createUserCall.call(
-                                    jwtToken: currentJwtToken,
-                                    gender: _model.genderSelectValue,
-                                    displayName: _model.userNameController.text,
-                                    phoneNumber:
-                                        '+91${_model.phoneNumberController.text}',
-                                  );
-                                  if (WePlayApiGroup.createUserCall.success(
-                                    (_model.apiResponse?.jsonBody ?? ''),
-                                  )!) {
-                                    setState(() {
-                                      _model.userRoleValueController?.reset();
-                                      _model.userDdValueController?.reset();
-                                    });
-                                    setState(() {
-                                      _model.userNameController?.clear();
-                                      _model.phoneNumberController?.clear();
-                                    });
-                                    setState(() {
-                                      _model.genderSelectValueController
-                                          ?.reset();
-                                    });
-                                    setState(() {
-                                      _model.userDdValueController?.value =
-                                          WePlayApiGroup.createUserCall.userId(
-                                        (_model.apiResponse?.jsonBody ?? ''),
-                                      )!;
-                                    });
-                                  } else {
-                                    await showDialog(
-                                      context: context,
-                                      builder: (alertDialogContext) {
-                                        return AlertDialog(
-                                          title: Text('Error'),
-                                          content: Text(
-                                              'User creation failed due to some reason'),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () => Navigator.pop(
-                                                  alertDialogContext),
-                                              child: Text('Ok'),
-                                            ),
-                                          ],
+                                onPressed: _model.isDataUploading1
+                                    ? null
+                                    : () async {
+                                        _model.apiResponse =
+                                            await WePlayApiGroup.createUserCall
+                                                .call(
+                                          jwtToken: currentJwtToken,
+                                          gender: _model.genderSelectValue,
+                                          displayName: _model
+                                              .userNameTextController.text,
+                                          phoneNumber:
+                                              '+91${_model.phoneNumberTextController.text}',
+                                          emailId:
+                                              _model.emailIdTextController.text,
+                                          instagramId: _model
+                                              .instagramIdTextController.text,
+                                          dateOfBirth: dateTimeFormat(
+                                              'yMd', _model.datePicked),
+                                          profilePic: _model.uploadedFileUrl1,
                                         );
-                                      },
-                                    );
-                                  }
+                                        if (WePlayApiGroup.createUserCall
+                                            .success(
+                                          (_model.apiResponse?.jsonBody ?? ''),
+                                        )!) {
+                                          setState(() {
+                                            _model.userRoleValueController
+                                                ?.reset();
+                                            _model.userDdValueController
+                                                ?.reset();
+                                          });
+                                          setState(() {
+                                            _model.userNameTextController
+                                                ?.clear();
+                                            _model.phoneNumberTextController
+                                                ?.clear();
+                                            _model.emailIdTextController
+                                                ?.clear();
+                                            _model.instagramIdTextController
+                                                ?.clear();
+                                          });
+                                          setState(() {
+                                            _model.genderSelectValueController
+                                                ?.reset();
+                                          });
+                                          setState(() {
+                                            _model.isDataUploading1 = false;
+                                            _model.uploadedLocalFile1 =
+                                                FFUploadedFile(
+                                                    bytes:
+                                                        Uint8List.fromList([]));
+                                            _model.uploadedFileUrl1 = '';
+                                          });
 
-                                  setState(() {});
-                                },
+                                          setState(() {
+                                            _model.userDdValueController
+                                                    ?.value =
+                                                WePlayApiGroup.createUserCall
+                                                    .userId(
+                                              (_model.apiResponse?.jsonBody ??
+                                                  ''),
+                                            )!;
+                                          });
+                                        } else {
+                                          await showDialog(
+                                            context: context,
+                                            builder: (alertDialogContext) {
+                                              return AlertDialog(
+                                                title: Text('Error'),
+                                                content: Text(
+                                                    'User creation failed due to some reason'),
+                                                actions: [
+                                                  TextButton(
+                                                    onPressed: () =>
+                                                        Navigator.pop(
+                                                            alertDialogContext),
+                                                    child: Text('Ok'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        }
+
+                                        setState(() {});
+                                      },
                                 text: 'Add New User',
                                 options: FFButtonOptions(
                                   width: MediaQuery.sizeOf(context).width * 1.0,
@@ -595,11 +1113,16 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                         FormFieldController<String>(
                                       _model.userDdValue ??= '',
                                     ),
-                                    options: List<String>.from(
-                                        updateTeamUsersRecordList
-                                            .map((e) => e.uid)
-                                            .toList()),
-                                    optionLabels: updateTeamUsersRecordList
+                                    options: List<String>.from(functions
+                                        .getUsersNotInTeam(
+                                            updateTeamUsersRecordList.toList(),
+                                            widget.team!.memberRefs.toList())
+                                        .map((e) => e.uid)
+                                        .toList()),
+                                    optionLabels: functions
+                                        .getUsersNotInTeam(
+                                            updateTeamUsersRecordList.toList(),
+                                            widget.team!.memberRefs.toList())
                                         .map((e) => e.displayName)
                                         .toList(),
                                     onChanged: (val) => setState(
@@ -856,13 +1379,14 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
                                             setState(() {
-                                              _model.wonTxtController?.text =
-                                                  ((String value) {
+                                              _model.wonTxtTextController
+                                                  ?.text = ((String value) {
                                                 return int.parse(value) == 0
                                                     ? '0'
                                                     : (int.parse(value) - 1)
                                                         .toString();
-                                              }(_model.wonTxtController.text));
+                                              }(_model
+                                                  .wonTxtTextController.text));
                                             });
                                           },
                                           child: FaIcon(
@@ -881,7 +1405,7 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                               width: 70.0,
                                               child: TextFormField(
                                                 controller:
-                                                    _model.wonTxtController,
+                                                    _model.wonTxtTextController,
                                                 focusNode:
                                                     _model.wonTxtFocusNode,
                                                 autofocus: true,
@@ -971,11 +1495,10 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                                           lineHeight: 1.0,
                                                         ),
                                                 textAlign: TextAlign.center,
-                                                minLines: null,
                                                 keyboardType:
                                                     TextInputType.number,
                                                 validator: _model
-                                                    .wonTxtControllerValidator
+                                                    .wonTxtTextControllerValidator
                                                     .asValidator(context),
                                               ),
                                             ),
@@ -988,13 +1511,14 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
                                             setState(() {
-                                              _model.wonTxtController?.text =
-                                                  ((String value) {
+                                              _model.wonTxtTextController
+                                                  ?.text = ((String value) {
                                                 return value == null
                                                     ? 1
                                                     : (int.parse(value) + 1);
-                                              }(_model.wonTxtController.text))
-                                                      .toString();
+                                              }(_model.wonTxtTextController
+                                                      .text))
+                                                  .toString();
                                             });
                                           },
                                           child: FaIcon(
@@ -1041,13 +1565,14 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
                                             setState(() {
-                                              _model.lostTxtController?.text =
-                                                  ((String value) {
+                                              _model.lostTxtTextController
+                                                  ?.text = ((String value) {
                                                 return int.parse(value) == 0
                                                     ? '0'
                                                     : (int.parse(value) - 1)
                                                         .toString();
-                                              }(_model.lostTxtController.text));
+                                              }(_model
+                                                  .lostTxtTextController.text));
                                             });
                                           },
                                           child: FaIcon(
@@ -1065,8 +1590,8 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                             child: Container(
                                               width: 70.0,
                                               child: TextFormField(
-                                                controller:
-                                                    _model.lostTxtController,
+                                                controller: _model
+                                                    .lostTxtTextController,
                                                 focusNode:
                                                     _model.lostTxtFocusNode,
                                                 autofocus: true,
@@ -1156,11 +1681,10 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                                           lineHeight: 1.0,
                                                         ),
                                                 textAlign: TextAlign.center,
-                                                minLines: null,
                                                 keyboardType:
                                                     TextInputType.number,
                                                 validator: _model
-                                                    .lostTxtControllerValidator
+                                                    .lostTxtTextControllerValidator
                                                     .asValidator(context),
                                               ),
                                             ),
@@ -1173,13 +1697,14 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
                                             setState(() {
-                                              _model.lostTxtController?.text =
-                                                  ((String value) {
+                                              _model.lostTxtTextController
+                                                  ?.text = ((String value) {
                                                 return value == null
                                                     ? 1
                                                     : (int.parse(value) + 1);
-                                              }(_model.lostTxtController.text))
-                                                      .toString();
+                                              }(_model.lostTxtTextController
+                                                      .text))
+                                                  .toString();
                                             });
                                           },
                                           child: FaIcon(
@@ -1226,13 +1751,14 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
                                             setState(() {
-                                              _model.drawTxtController?.text =
-                                                  ((String value) {
+                                              _model.drawTxtTextController
+                                                  ?.text = ((String value) {
                                                 return int.parse(value) == 0
                                                     ? '0'
                                                     : (int.parse(value) - 1)
                                                         .toString();
-                                              }(_model.drawTxtController.text));
+                                              }(_model
+                                                  .drawTxtTextController.text));
                                             });
                                           },
                                           child: FaIcon(
@@ -1250,8 +1776,8 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                             child: Container(
                                               width: 70.0,
                                               child: TextFormField(
-                                                controller:
-                                                    _model.drawTxtController,
+                                                controller: _model
+                                                    .drawTxtTextController,
                                                 focusNode:
                                                     _model.drawTxtFocusNode,
                                                 autofocus: true,
@@ -1341,11 +1867,10 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                                           lineHeight: 1.0,
                                                         ),
                                                 textAlign: TextAlign.center,
-                                                minLines: null,
                                                 keyboardType:
                                                     TextInputType.number,
                                                 validator: _model
-                                                    .drawTxtControllerValidator
+                                                    .drawTxtTextControllerValidator
                                                     .asValidator(context),
                                               ),
                                             ),
@@ -1358,13 +1883,14 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                           highlightColor: Colors.transparent,
                                           onTap: () async {
                                             setState(() {
-                                              _model.drawTxtController?.text =
-                                                  ((String value) {
+                                              _model.drawTxtTextController
+                                                  ?.text = ((String value) {
                                                 return value == null
                                                     ? 1
                                                     : (int.parse(value) + 1);
-                                              }(_model.drawTxtController.text))
-                                                      .toString();
+                                              }(_model.drawTxtTextController
+                                                      .text))
+                                                  .toString();
                                             });
                                           },
                                           child: FaIcon(
@@ -1389,13 +1915,13 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                       .update(createTeamsRecordData(
                                     won: (String won) {
                                       return won == null ? 0 : int.parse(won);
-                                    }(_model.wonTxtController.text),
+                                    }(_model.wonTxtTextController.text),
                                     lost: (String lost) {
                                       return lost == null ? 0 : int.parse(lost);
-                                    }(_model.lostTxtController.text),
+                                    }(_model.lostTxtTextController.text),
                                     draw: (String draw) {
                                       return draw == null ? 0 : int.parse(draw);
-                                    }(_model.drawTxtController.text),
+                                    }(_model.drawTxtTextController.text),
                                   ));
                                   await showDialog(
                                     context: context,
@@ -1474,14 +2000,14 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                         final selectedMedia = await selectMedia(
                                           includeBlurHash: true,
                                           mediaSource: MediaSource.photoGallery,
-                                          multiImage: true,
+                                          multiImage: false,
                                         );
                                         if (selectedMedia != null &&
                                             selectedMedia.every((m) =>
                                                 validateFileFormat(
                                                     m.storagePath, context))) {
                                           setState(() =>
-                                              _model.isDataUploading1 = true);
+                                              _model.isDataUploading2 = true);
                                           var selectedUploadedFiles =
                                               <FFUploadedFile>[];
 
@@ -1519,17 +2045,17 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                           } finally {
                                             ScaffoldMessenger.of(context)
                                                 .hideCurrentSnackBar();
-                                            _model.isDataUploading1 = false;
+                                            _model.isDataUploading2 = false;
                                           }
                                           if (selectedUploadedFiles.length ==
                                                   selectedMedia.length &&
                                               downloadUrls.length ==
                                                   selectedMedia.length) {
                                             setState(() {
-                                              _model.uploadedLocalFiles1 =
-                                                  selectedUploadedFiles;
-                                              _model.uploadedFileUrls1 =
-                                                  downloadUrls;
+                                              _model.uploadedLocalFile2 =
+                                                  selectedUploadedFiles.first;
+                                              _model.uploadedFileUrl2 =
+                                                  downloadUrls.first;
                                             });
                                             showUploadMessage(
                                                 context, 'Success!');
@@ -1640,7 +2166,7 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                                 validateFileFormat(
                                                     m.storagePath, context))) {
                                           setState(() =>
-                                              _model.isDataUploading2 = true);
+                                              _model.isDataUploading3 = true);
                                           var selectedUploadedFiles =
                                               <FFUploadedFile>[];
 
@@ -1671,16 +2197,16 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                                 .map((u) => u!)
                                                 .toList();
                                           } finally {
-                                            _model.isDataUploading2 = false;
+                                            _model.isDataUploading3 = false;
                                           }
                                           if (selectedUploadedFiles.length ==
                                                   selectedMedia.length &&
                                               downloadUrls.length ==
                                                   selectedMedia.length) {
                                             setState(() {
-                                              _model.uploadedLocalFile2 =
+                                              _model.uploadedLocalFile3 =
                                                   selectedUploadedFiles.first;
-                                              _model.uploadedFileUrl2 =
+                                              _model.uploadedFileUrl3 =
                                                   downloadUrls.first;
                                             });
                                           } else {
@@ -1767,34 +2293,56 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   5.0, 15.0, 5.0, 5.0),
                               child: FFButtonWidget(
-                                onPressed: () async {
-                                  await widget.team!.reference.update({
-                                    ...mapToFirestore(
-                                      {
-                                        'images': FieldValue.arrayUnion(
-                                            [_model.uploadedFileUrls1]),
-                                        'videos': FieldValue.arrayUnion(
-                                            [_model.uploadedFileUrl2]),
+                                onPressed: (_model.isDataUploading2 ||
+                                        _model.isDataUploading3 ||
+                                        ((_model.uploadedFileUrl2 == null ||
+                                                _model.uploadedFileUrl2 ==
+                                                    '') &&
+                                            (_model.uploadedFileUrl3 == null ||
+                                                _model.uploadedFileUrl3 == '')))
+                                    ? null
+                                    : () async {
+                                        if (_model.uploadedFileUrl3 != null &&
+                                            _model.uploadedFileUrl3 != '') {
+                                          await widget.team!.reference.update({
+                                            ...mapToFirestore(
+                                              {
+                                                'videos': FieldValue.arrayUnion(
+                                                    [_model.uploadedFileUrl3]),
+                                              },
+                                            ),
+                                          });
+                                        }
+                                        if (_model.uploadedFileUrl2 != null &&
+                                            _model.uploadedFileUrl2 != '') {
+                                          await widget.team!.reference.update({
+                                            ...mapToFirestore(
+                                              {
+                                                'images': FieldValue.arrayUnion(
+                                                    [_model.uploadedFileUrl2]),
+                                              },
+                                            ),
+                                          });
+                                        }
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return AlertDialog(
+                                              title: Text('Success'),
+                                              content:
+                                                  Text('Team data updated'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext),
+                                                  child: Text('Ok'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
                                       },
-                                    ),
-                                  });
-                                  await showDialog(
-                                    context: context,
-                                    builder: (alertDialogContext) {
-                                      return AlertDialog(
-                                        title: Text('Success'),
-                                        content: Text('Team data updated'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () => Navigator.pop(
-                                                alertDialogContext),
-                                            child: Text('Ok'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
                                 text: 'Update Team ${widget.team?.name}',
                                 options: FFButtonOptions(
                                   width: MediaQuery.sizeOf(context).width * 1.0,
@@ -1818,6 +2366,261 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
                                     width: 1.0,
                                   ),
                                   borderRadius: BorderRadius.circular(18.0),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  if (widget.pageTitle == 'Team Icon')
+                    Container(
+                      width: MediaQuery.sizeOf(context).width * 1.0,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryBackground,
+                      ),
+                      child: Padding(
+                        padding: EdgeInsetsDirectional.fromSTEB(
+                            10.0, 10.0, 10.0, 0.0),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Row(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Expanded(
+                                  child: Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 10.0, 0.0, 0.0),
+                                    child: InkWell(
+                                      splashColor: Colors.transparent,
+                                      focusColor: Colors.transparent,
+                                      hoverColor: Colors.transparent,
+                                      highlightColor: Colors.transparent,
+                                      onTap: () async {
+                                        // uploadImg
+                                        final selectedMedia = await selectMedia(
+                                          includeBlurHash: true,
+                                          mediaSource: MediaSource.photoGallery,
+                                          multiImage: false,
+                                        );
+                                        if (selectedMedia != null &&
+                                            selectedMedia.every((m) =>
+                                                validateFileFormat(
+                                                    m.storagePath, context))) {
+                                          setState(() =>
+                                              _model.isDataUploading4 = true);
+                                          var selectedUploadedFiles =
+                                              <FFUploadedFile>[];
+
+                                          var downloadUrls = <String>[];
+                                          try {
+                                            selectedUploadedFiles =
+                                                selectedMedia
+                                                    .map((m) => FFUploadedFile(
+                                                          name: m.storagePath
+                                                              .split('/')
+                                                              .last,
+                                                          bytes: m.bytes,
+                                                          height: m.dimensions
+                                                              ?.height,
+                                                          width: m.dimensions
+                                                              ?.width,
+                                                          blurHash: m.blurHash,
+                                                        ))
+                                                    .toList();
+
+                                            downloadUrls = (await Future.wait(
+                                              selectedMedia.map(
+                                                (m) async => await uploadData(
+                                                    m.storagePath, m.bytes),
+                                              ),
+                                            ))
+                                                .where((u) => u != null)
+                                                .map((u) => u!)
+                                                .toList();
+                                          } finally {
+                                            _model.isDataUploading4 = false;
+                                          }
+                                          if (selectedUploadedFiles.length ==
+                                                  selectedMedia.length &&
+                                              downloadUrls.length ==
+                                                  selectedMedia.length) {
+                                            setState(() {
+                                              _model.uploadedLocalFile4 =
+                                                  selectedUploadedFiles.first;
+                                              _model.uploadedFileUrl4 =
+                                                  downloadUrls.first;
+                                            });
+                                          } else {
+                                            setState(() {});
+                                            return;
+                                          }
+                                        }
+                                      },
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 60.0,
+                                        decoration: BoxDecoration(
+                                          color: Color(0x36FCFCFC),
+                                          borderRadius: BorderRadius.only(
+                                            bottomLeft: Radius.circular(0.0),
+                                            bottomRight: Radius.circular(0.0),
+                                            topLeft: Radius.circular(0.0),
+                                            topRight: Radius.circular(0.0),
+                                          ),
+                                          border: Border.all(
+                                            width: 0.0,
+                                          ),
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            Flexible(
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        16.0, 16.0, 16.0, 0.0),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    if (_model.uploadedFileUrl4 !=
+                                                            null &&
+                                                        _model.uploadedFileUrl4 !=
+                                                            '')
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    0.0,
+                                                                    20.0,
+                                                                    0.0),
+                                                        child: Container(
+                                                          width: 40.0,
+                                                          height: 40.0,
+                                                          clipBehavior:
+                                                              Clip.antiAlias,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            shape:
+                                                                BoxShape.circle,
+                                                          ),
+                                                          child: Image.network(
+                                                            _model
+                                                                .uploadedFileUrl4,
+                                                            fit: BoxFit.cover,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    Icon(
+                                                      Icons
+                                                          .file_upload_outlined,
+                                                      color:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryText,
+                                                      size: 18.0,
+                                                    ),
+                                                    Expanded(
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    10.0,
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0),
+                                                        child: Text(
+                                                          'Upload team photo',
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Roboto Condensed',
+                                                                color: FlutterFlowTheme.of(
+                                                                        context)
+                                                                    .secondaryText,
+                                                                letterSpacing:
+                                                                    0.0,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  5.0, 15.0, 5.0, 5.0),
+                              child: FFButtonWidget(
+                                onPressed: (_model.isDataUploading4 ||
+                                        (_model.uploadedFileUrl4 == null ||
+                                            _model.uploadedFileUrl4 == ''))
+                                    ? null
+                                    : () async {
+                                        await widget.team!.reference
+                                            .update(createTeamsRecordData(
+                                          teamIcon: _model.uploadedFileUrl4,
+                                        ));
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return AlertDialog(
+                                              title: Text('Success'),
+                                              content:
+                                                  Text('Team Icon updated'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext),
+                                                  child: Text('Ok'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
+                                      },
+                                text: 'Update Team ${widget.team?.name}',
+                                options: FFButtonOptions(
+                                  width: MediaQuery.sizeOf(context).width * 1.0,
+                                  height: 40.0,
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      24.0, 0.0, 24.0, 0.0),
+                                  iconPadding: EdgeInsetsDirectional.fromSTEB(
+                                      0.0, 0.0, 0.0, 0.0),
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  textStyle: FlutterFlowTheme.of(context)
+                                      .titleSmall
+                                      .override(
+                                        fontFamily: 'Roboto',
+                                        color: Colors.white,
+                                        letterSpacing: 0.0,
+                                      ),
+                                  elevation: 3.0,
+                                  borderSide: BorderSide(
+                                    color: Colors.transparent,
+                                    width: 1.0,
+                                  ),
+                                  borderRadius: BorderRadius.circular(18.0),
+                                  disabledColor:
+                                      FlutterFlowTheme.of(context).accent1,
+                                  disabledTextColor:
+                                      FlutterFlowTheme.of(context).primaryText,
                                 ),
                               ),
                             ),

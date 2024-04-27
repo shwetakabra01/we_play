@@ -33,8 +33,8 @@ class AdminModel extends FlutterFlowModel<AdminWidget> {
   FormFieldController<String>? dropDownValueController;
   // State field(s) for amount widget.
   FocusNode? amountFocusNode;
-  TextEditingController? amountController;
-  String? Function(BuildContext, String?)? amountControllerValidator;
+  TextEditingController? amountTextController;
+  String? Function(BuildContext, String?)? amountTextControllerValidator;
   // Stores action output result for [Alert Dialog - Custom Dialog] action in Icon widget.
   String? menuAction;
   // State field(s) for ddlTeam1 widget.
@@ -53,6 +53,6 @@ class AdminModel extends FlutterFlowModel<AdminWidget> {
     unfocusNode.dispose();
     tabBarController?.dispose();
     amountFocusNode?.dispose();
-    amountController?.dispose();
+    amountTextController?.dispose();
   }
 }

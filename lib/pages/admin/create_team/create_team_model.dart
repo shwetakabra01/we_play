@@ -18,12 +18,12 @@ class CreateTeamModel extends FlutterFlowModel<CreateTeamWidget> {
   final unfocusNode = FocusNode();
   // State field(s) for teamName widget.
   FocusNode? teamNameFocusNode;
-  TextEditingController? teamNameController;
-  String? Function(BuildContext, String?)? teamNameControllerValidator;
+  TextEditingController? teamNameTextController;
+  String? Function(BuildContext, String?)? teamNameTextControllerValidator;
   // State field(s) for teamOwner widget.
   FocusNode? teamOwnerFocusNode;
-  TextEditingController? teamOwnerController;
-  String? Function(BuildContext, String?)? teamOwnerControllerValidator;
+  TextEditingController? teamOwnerTextController;
+  String? Function(BuildContext, String?)? teamOwnerTextControllerValidator;
   bool isDataUploading = false;
   FFUploadedFile uploadedLocalFile =
       FFUploadedFile(bytes: Uint8List.fromList([]));
@@ -36,9 +36,9 @@ class CreateTeamModel extends FlutterFlowModel<CreateTeamWidget> {
   void dispose() {
     unfocusNode.dispose();
     teamNameFocusNode?.dispose();
-    teamNameController?.dispose();
+    teamNameTextController?.dispose();
 
     teamOwnerFocusNode?.dispose();
-    teamOwnerController?.dispose();
+    teamOwnerTextController?.dispose();
   }
 }

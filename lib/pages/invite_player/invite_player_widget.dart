@@ -54,7 +54,7 @@ class _InvitePlayerWidgetState extends State<InvitePlayerWidget> {
       }
     });
 
-    _model.guestsController ??= TextEditingController(
+    _model.guestsTextController ??= TextEditingController(
         text: valueOrDefault<String>(
       widget.event?.numberOfGuests?.toString(),
       '0',
@@ -202,12 +202,12 @@ class _InvitePlayerWidgetState extends State<InvitePlayerWidget> {
                             highlightColor: Colors.transparent,
                             onTap: () async {
                               setState(() {
-                                _model.guestsController?.text =
+                                _model.guestsTextController?.text =
                                     ((String value) {
                                   return int.parse(value) == 0
                                       ? '0'
                                       : (int.parse(value) - 1).toString();
-                                }(_model.guestsController.text));
+                                }(_model.guestsTextController.text));
                               });
                             },
                             child: FaIcon(
@@ -223,7 +223,7 @@ class _InvitePlayerWidgetState extends State<InvitePlayerWidget> {
                             child: Container(
                               width: 70.0,
                               child: TextFormField(
-                                controller: _model.guestsController,
+                                controller: _model.guestsTextController,
                                 focusNode: _model.guestsFocusNode,
                                 autofocus: true,
                                 readOnly: widget.event!.splitCost,
@@ -286,8 +286,7 @@ class _InvitePlayerWidgetState extends State<InvitePlayerWidget> {
                                       lineHeight: 1.0,
                                     ),
                                 textAlign: TextAlign.center,
-                                minLines: null,
-                                validator: _model.guestsControllerValidator
+                                validator: _model.guestsTextControllerValidator
                                     .asValidator(context),
                               ),
                             ),
@@ -301,14 +300,15 @@ class _InvitePlayerWidgetState extends State<InvitePlayerWidget> {
                             highlightColor: Colors.transparent,
                             onTap: () async {
                               setState(() {
-                                _model.guestsController?.text = ((String value,
-                                            int capacity, int participants) {
+                                _model.guestsTextController
+                                    ?.text = ((String value, int capacity,
+                                            int participants) {
                                   return (int.parse(value) >=
                                           (capacity - participants))
                                       ? (capacity - participants)
                                       : (int.parse(value) + 1);
                                 }(
-                                        _model.guestsController.text,
+                                        _model.guestsTextController.text,
                                         widget.event!.playersCapacity,
                                         widget.event!.participantsRefs.length))
                                     .toString();
@@ -628,19 +628,21 @@ class _InvitePlayerWidgetState extends State<InvitePlayerWidget> {
                             child: FFButtonWidget(
                               onPressed: () async {
                                 if (!widget.event!.splitCost &&
-                                    (_model.guestsController.text != null &&
-                                        int.parse(
-                                                _model.guestsController.text) >
-                                            0 &&
-                                        int.parse(
-                                                _model.guestsController.text) <=
-                                            (widget.event!.playersCapacity -
-                                                widget.event!.participantsRefs
-                                                    .length))) {
+                                    ((String guests, int capacity,
+                                            int participants) {
+                                      return guests != null &&
+                                          int.parse(guests) > 0 &&
+                                          int.parse(guests) <=
+                                              (capacity - participants);
+                                    }(
+                                        _model.guestsTextController.text,
+                                        widget.event!.playersCapacity,
+                                        widget
+                                            .event!.participantsRefs.length))) {
                                   await widget.event!.reference
                                       .update(createEventsRecordData(
                                     numberOfGuests: int.tryParse(
-                                        _model.guestsController.text),
+                                        _model.guestsTextController.text),
                                   ));
                                 }
                                 if ((_model.selectedUsers.isNotEmpty) &&

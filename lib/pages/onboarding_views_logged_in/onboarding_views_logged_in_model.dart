@@ -34,9 +34,9 @@ class OnboardingViewsLoggedInModel
       : 0;
   // State field(s) for emailId widget.
   FocusNode? emailIdFocusNode;
-  TextEditingController? emailIdController;
-  String? Function(BuildContext, String?)? emailIdControllerValidator;
-  String? _emailIdControllerValidator(BuildContext context, String? val) {
+  TextEditingController? emailIdTextController;
+  String? Function(BuildContext, String?)? emailIdTextControllerValidator;
+  String? _emailIdTextControllerValidator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Email is required';
     }
@@ -49,9 +49,9 @@ class OnboardingViewsLoggedInModel
 
   // State field(s) for fullName widget.
   FocusNode? fullNameFocusNode;
-  TextEditingController? fullNameController;
-  String? Function(BuildContext, String?)? fullNameControllerValidator;
-  String? _fullNameControllerValidator(BuildContext context, String? val) {
+  TextEditingController? fullNameTextController;
+  String? Function(BuildContext, String?)? fullNameTextControllerValidator;
+  String? _fullNameTextControllerValidator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Name is required';
     }
@@ -82,17 +82,17 @@ class OnboardingViewsLoggedInModel
 
   @override
   void initState(BuildContext context) {
-    emailIdControllerValidator = _emailIdControllerValidator;
-    fullNameControllerValidator = _fullNameControllerValidator;
+    emailIdTextControllerValidator = _emailIdTextControllerValidator;
+    fullNameTextControllerValidator = _fullNameTextControllerValidator;
   }
 
   @override
   void dispose() {
     unfocusNode.dispose();
     emailIdFocusNode?.dispose();
-    emailIdController?.dispose();
+    emailIdTextController?.dispose();
 
     fullNameFocusNode?.dispose();
-    fullNameController?.dispose();
+    fullNameTextController?.dispose();
   }
 }

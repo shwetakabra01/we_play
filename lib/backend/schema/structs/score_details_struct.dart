@@ -15,11 +15,13 @@ class ScoreDetailsStruct extends FFFirebaseStruct {
     DocumentReference? team,
     DateTime? datetime,
     String? timer,
+    DocumentReference? vsTeam,
     FirestoreUtilData firestoreUtilData = const FirestoreUtilData(),
   })  : _player = player,
         _team = team,
         _datetime = datetime,
         _timer = timer,
+        _vsTeam = vsTeam,
         super(firestoreUtilData);
 
   // "player" field.
@@ -46,12 +48,19 @@ class ScoreDetailsStruct extends FFFirebaseStruct {
   set timer(String? val) => _timer = val;
   bool hasTimer() => _timer != null;
 
+  // "vsTeam" field.
+  DocumentReference? _vsTeam;
+  DocumentReference? get vsTeam => _vsTeam;
+  set vsTeam(DocumentReference? val) => _vsTeam = val;
+  bool hasVsTeam() => _vsTeam != null;
+
   static ScoreDetailsStruct fromMap(Map<String, dynamic> data) =>
       ScoreDetailsStruct(
         player: data['player'] as DocumentReference?,
         team: data['team'] as DocumentReference?,
         datetime: data['datetime'] as DateTime?,
         timer: data['timer'] as String?,
+        vsTeam: data['vsTeam'] as DocumentReference?,
       );
 
   static ScoreDetailsStruct? maybeFromMap(dynamic data) => data is Map
@@ -63,6 +72,7 @@ class ScoreDetailsStruct extends FFFirebaseStruct {
         'team': _team,
         'datetime': _datetime,
         'timer': _timer,
+        'vsTeam': _vsTeam,
       }.withoutNulls;
 
   @override
@@ -82,6 +92,10 @@ class ScoreDetailsStruct extends FFFirebaseStruct {
         'timer': serializeParam(
           _timer,
           ParamType.String,
+        ),
+        'vsTeam': serializeParam(
+          _vsTeam,
+          ParamType.DocumentReference,
         ),
       }.withoutNulls;
 
@@ -109,6 +123,12 @@ class ScoreDetailsStruct extends FFFirebaseStruct {
           ParamType.String,
           false,
         ),
+        vsTeam: deserializeParam(
+          data['vsTeam'],
+          ParamType.DocumentReference,
+          false,
+          collectionNamePath: ['teams'],
+        ),
       );
 
   @override
@@ -120,12 +140,13 @@ class ScoreDetailsStruct extends FFFirebaseStruct {
         player == other.player &&
         team == other.team &&
         datetime == other.datetime &&
-        timer == other.timer;
+        timer == other.timer &&
+        vsTeam == other.vsTeam;
   }
 
   @override
   int get hashCode =>
-      const ListEquality().hash([player, team, datetime, timer]);
+      const ListEquality().hash([player, team, datetime, timer, vsTeam]);
 }
 
 ScoreDetailsStruct createScoreDetailsStruct({
@@ -133,6 +154,7 @@ ScoreDetailsStruct createScoreDetailsStruct({
   DocumentReference? team,
   DateTime? datetime,
   String? timer,
+  DocumentReference? vsTeam,
   Map<String, dynamic> fieldValues = const {},
   bool clearUnsetFields = true,
   bool create = false,
@@ -143,6 +165,7 @@ ScoreDetailsStruct createScoreDetailsStruct({
       team: team,
       datetime: datetime,
       timer: timer,
+      vsTeam: vsTeam,
       firestoreUtilData: FirestoreUtilData(
         clearUnsetFields: clearUnsetFields,
         create: create,

@@ -96,9 +96,10 @@ class VenueBookingModel extends FlutterFlowModel<VenueBookingWidget> {
   bool? spliCostValue;
   // State field(s) for participants widget.
   FocusNode? participantsFocusNode;
-  TextEditingController? participantsController;
-  String? Function(BuildContext, String?)? participantsControllerValidator;
-  String? _participantsControllerValidator(BuildContext context, String? val) {
+  TextEditingController? participantsTextController;
+  String? Function(BuildContext, String?)? participantsTextControllerValidator;
+  String? _participantsTextControllerValidator(
+      BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Field is required';
     }
@@ -115,13 +116,13 @@ class VenueBookingModel extends FlutterFlowModel<VenueBookingWidget> {
 
   @override
   void initState(BuildContext context) {
-    participantsControllerValidator = _participantsControllerValidator;
+    participantsTextControllerValidator = _participantsTextControllerValidator;
   }
 
   @override
   void dispose() {
     unfocusNode.dispose();
     participantsFocusNode?.dispose();
-    participantsController?.dispose();
+    participantsTextController?.dispose();
   }
 }

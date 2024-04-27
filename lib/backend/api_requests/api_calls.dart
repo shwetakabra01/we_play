@@ -13,7 +13,7 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 
 class WePlayApiGroup {
   static String baseUrl =
-      'https://us-central1-playprod-2b863.cloudfunctions.net/wePlayApi/api/';
+      'https://us-central1-play-e84eb.cloudfunctions.net/wePlayApi/api/';
   static Map<String, String> headers = {
     'Authorization': 'Bearer [jwt_token]',
   };
@@ -30,6 +30,7 @@ class WePlayApiGroup {
   static GetVenuesCall getVenuesCall = GetVenuesCall();
   static MakePublicCall makePublicCall = MakePublicCall();
   static CreateUserCall createUserCall = CreateUserCall();
+  static UploadImageCall uploadImageCall = UploadImageCall();
 }
 
 class GetMyEventsCall {
@@ -347,13 +348,21 @@ class CreateUserCall {
     String? gender = '',
     String? displayName = '',
     String? phoneNumber = '',
+    String? emailId = '',
+    String? instagramId = '',
+    String? dateOfBirth = '',
+    String? profilePic = '',
     String? jwtToken = '',
   }) async {
     final ffApiRequestBody = '''
 {
   "displayName": "${displayName}",
   "phoneNumber": "${phoneNumber}",
-  "gender": "${gender}"
+  "gender": "${gender}",
+  "emailId": "${emailId}",
+  "instagramId": "${instagramId}",
+  "dateOfBirth": "${dateOfBirth}",
+  "profilePic": "${profilePic}"
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'Create User',
@@ -381,6 +390,36 @@ class CreateUserCall {
         response,
         r'''$.success''',
       ));
+}
+
+class UploadImageCall {
+  Future<ApiCallResponse> call({
+    String? file = '',
+    String? fileName = '',
+    String? jwtToken = '',
+  }) async {
+    final ffApiRequestBody = '''
+{
+  "fileData": "${file}",
+  "fileName": "${fileName}"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'Upload Image',
+      apiUrl: '${WePlayApiGroup.baseUrl}uploadImage',
+      callType: ApiCallType.POST,
+      headers: {
+        'Authorization': 'Bearer ${jwtToken}',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
 }
 
 /// End WePlayApi Group Code

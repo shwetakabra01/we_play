@@ -1,4 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/api_requests/api_calls.dart';
 import '/backend/backend.dart';
 import '/backend/firebase_storage/storage.dart';
 import '/backend/schema/enums/enums.dart';
@@ -7,6 +8,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_timer.dart';
 import '/flutter_flow/flutter_flow_util.dart';
+import '/flutter_flow/flutter_flow_video_player.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/upload_data.dart';
 import '/pages/score_goal/score_goal_widget.dart';
@@ -25,6 +27,10 @@ class FixtureDetailsModel extends FlutterFlowModel<FixtureDetailsWidget> {
   bool timerStarted = false;
 
   bool allowUndo = false;
+
+  bool imageView = false;
+
+  String? imagePath;
 
   ///  State fields for stateful widgets in this page.
 
@@ -51,13 +57,16 @@ class FixtureDetailsModel extends FlutterFlowModel<FixtureDetailsWidget> {
   // Stores action output result for [Alert Dialog - Custom Dialog] action in Text widget.
   String? tt2;
   bool isDataUploading1 = false;
-  List<FFUploadedFile> uploadedLocalFiles1 = [];
-  List<String> uploadedFileUrls1 = [];
+  FFUploadedFile uploadedLocalFile1 =
+      FFUploadedFile(bytes: Uint8List.fromList([]));
 
   bool isDataUploading2 = false;
   FFUploadedFile uploadedLocalFile2 =
       FFUploadedFile(bytes: Uint8List.fromList([]));
   String uploadedFileUrl2 = '';
+
+  // Stores action output result for [Backend Call - API (Upload Image)] action in Button widget.
+  ApiCallResponse? apiResulttaq;
 
   @override
   void initState(BuildContext context) {}

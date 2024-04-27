@@ -26,9 +26,9 @@ class CompleteProfileModel extends FlutterFlowModel<CompleteProfileWidget> {
 
   // State field(s) for emailtxt widget.
   FocusNode? emailtxtFocusNode;
-  TextEditingController? emailtxtController;
-  String? Function(BuildContext, String?)? emailtxtControllerValidator;
-  String? _emailtxtControllerValidator(BuildContext context, String? val) {
+  TextEditingController? emailtxtTextController;
+  String? Function(BuildContext, String?)? emailtxtTextControllerValidator;
+  String? _emailtxtTextControllerValidator(BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Field is required';
     }
@@ -41,9 +41,10 @@ class CompleteProfileModel extends FlutterFlowModel<CompleteProfileWidget> {
 
   // State field(s) for displayName widget.
   FocusNode? displayNameFocusNode;
-  TextEditingController? displayNameController;
-  String? Function(BuildContext, String?)? displayNameControllerValidator;
-  String? _displayNameControllerValidator(BuildContext context, String? val) {
+  TextEditingController? displayNameTextController;
+  String? Function(BuildContext, String?)? displayNameTextControllerValidator;
+  String? _displayNameTextControllerValidator(
+      BuildContext context, String? val) {
     if (val == null || val.isEmpty) {
       return 'Enter your name';
     }
@@ -66,17 +67,17 @@ class CompleteProfileModel extends FlutterFlowModel<CompleteProfileWidget> {
 
   @override
   void initState(BuildContext context) {
-    emailtxtControllerValidator = _emailtxtControllerValidator;
-    displayNameControllerValidator = _displayNameControllerValidator;
+    emailtxtTextControllerValidator = _emailtxtTextControllerValidator;
+    displayNameTextControllerValidator = _displayNameTextControllerValidator;
   }
 
   @override
   void dispose() {
     unfocusNode.dispose();
     emailtxtFocusNode?.dispose();
-    emailtxtController?.dispose();
+    emailtxtTextController?.dispose();
 
     displayNameFocusNode?.dispose();
-    displayNameController?.dispose();
+    displayNameTextController?.dispose();
   }
 }

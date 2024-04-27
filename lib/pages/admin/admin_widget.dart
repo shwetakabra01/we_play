@@ -39,7 +39,7 @@ class _AdminWidgetState extends State<AdminWidget>
       length: 3,
       initialIndex: 0,
     )..addListener(() => setState(() {}));
-    _model.amountController ??= TextEditingController();
+    _model.amountTextController ??= TextEditingController();
     _model.amountFocusNode ??= FocusNode();
   }
 
@@ -269,7 +269,7 @@ class _AdminWidgetState extends State<AdminWidget>
                                                     8.0, 0.0, 8.0, 0.0),
                                             child: TextFormField(
                                               controller:
-                                                  _model.amountController,
+                                                  _model.amountTextController,
                                               focusNode: _model.amountFocusNode,
                                               autofocus: true,
                                               obscureText: false,
@@ -344,9 +344,8 @@ class _AdminWidgetState extends State<AdminWidget>
                                                         fontFamily: 'Roboto',
                                                         letterSpacing: 0.0,
                                                       ),
-                                              minLines: null,
                                               validator: _model
-                                                  .amountControllerValidator
+                                                  .amountTextControllerValidator
                                                   .asValidator(context),
                                             ),
                                           ),
@@ -376,11 +375,11 @@ class _AdminWidgetState extends State<AdminWidget>
                                                               title: Text(
                                                                   'Confirm'),
                                                               content: Text(
-                                                                  'You are trying to add balance for user \"${_model.dropDownValue}\" with amount ${_model.amountController.text}. His balance will become ${formatNumber(
+                                                                  'You are trying to add balance for user \"${_model.dropDownValue}\" with amount ${_model.amountTextController.text}. His balance will become ${formatNumber(
                                                                 _model.selectedUser!
                                                                         .walletBalance +
                                                                     double.parse(_model
-                                                                        .amountController
+                                                                        .amountTextController
                                                                         .text),
                                                                 formatType:
                                                                     FormatType
@@ -420,7 +419,7 @@ class _AdminWidgetState extends State<AdminWidget>
                                                         'walletBalance': FieldValue
                                                             .increment(double
                                                                 .parse(_model
-                                                                    .amountController
+                                                                    .amountTextController
                                                                     .text)),
                                                       },
                                                     ),
@@ -471,288 +470,297 @@ class _AdminWidgetState extends State<AdminWidget>
                               Column(
                                 mainAxisSize: MainAxisSize.max,
                                 children: [
-                                  StreamBuilder<List<TeamsRecord>>(
-                                    stream: queryTeamsRecord(
-                                      queryBuilder: (teamsRecord) =>
-                                          teamsRecord.where(
-                                        'isDeleted',
-                                        isNotEqualTo: true,
+                                  Flexible(
+                                    child: StreamBuilder<List<TeamsRecord>>(
+                                      stream: queryTeamsRecord(
+                                        queryBuilder: (teamsRecord) =>
+                                            teamsRecord.where(
+                                          'isDeleted',
+                                          isNotEqualTo: true,
+                                        ),
                                       ),
-                                    ),
-                                    builder: (context, snapshot) {
-                                      // Customize what your widget looks like when it's loading.
-                                      if (!snapshot.hasData) {
-                                        return Center(
-                                          child: SizedBox(
-                                            width: 50.0,
-                                            height: 50.0,
-                                            child: CircularProgressIndicator(
-                                              valueColor:
-                                                  AlwaysStoppedAnimation<Color>(
-                                                FlutterFlowTheme.of(context)
-                                                    .primary,
-                                              ),
-                                            ),
-                                          ),
-                                        );
-                                      }
-                                      List<TeamsRecord>
-                                          listViewTeamsRecordList =
-                                          snapshot.data!;
-                                      return ListView.builder(
-                                        padding: EdgeInsets.zero,
-                                        shrinkWrap: true,
-                                        scrollDirection: Axis.vertical,
-                                        itemCount:
-                                            listViewTeamsRecordList.length,
-                                        itemBuilder: (context, listViewIndex) {
-                                          final listViewTeamsRecord =
-                                              listViewTeamsRecordList[
-                                                  listViewIndex];
-                                          return Container(
-                                            decoration: BoxDecoration(
-                                              color:
+                                      builder: (context, snapshot) {
+                                        // Customize what your widget looks like when it's loading.
+                                        if (!snapshot.hasData) {
+                                          return Center(
+                                            child: SizedBox(
+                                              width: 50.0,
+                                              height: 50.0,
+                                              child: CircularProgressIndicator(
+                                                valueColor:
+                                                    AlwaysStoppedAnimation<
+                                                        Color>(
                                                   FlutterFlowTheme.of(context)
-                                                      .secondaryBackground,
-                                            ),
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      10.0, 10.0, 10.0, 10.0),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Padding(
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 0.0,
-                                                                10.0, 0.0),
-                                                    child: Container(
-                                                      width: 30.0,
-                                                      height: 30.0,
-                                                      decoration: BoxDecoration(
-                                                        color: FlutterFlowTheme
-                                                                .of(context)
-                                                            .secondaryBackground,
-                                                        image: DecorationImage(
-                                                          fit: BoxFit.cover,
-                                                          image: Image.network(
-                                                            listViewTeamsRecord
-                                                                .teamIcon,
-                                                          ).image,
-                                                        ),
-                                                        shape: BoxShape.circle,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    listViewTeamsRecord.name,
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .labelLarge
-                                                        .override(
-                                                          fontFamily: 'Roboto',
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                                  ),
-                                                  Expanded(
-                                                    child: Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  10.0,
-                                                                  0.0,
-                                                                  0.0,
-                                                                  0.0),
-                                                      child: Text(
-                                                        listViewTeamsRecord
-                                                            .teamOwner,
-                                                        style:
-                                                            FlutterFlowTheme.of(
-                                                                    context)
-                                                                .labelLarge
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Roboto',
-                                                                  letterSpacing:
-                                                                      0.0,
-                                                                ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Builder(
-                                                    builder: (context) =>
-                                                        Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0.0,
-                                                                  0.0,
-                                                                  10.0,
-                                                                  0.0),
-                                                      child: InkWell(
-                                                        splashColor:
-                                                            Colors.transparent,
-                                                        focusColor:
-                                                            Colors.transparent,
-                                                        hoverColor:
-                                                            Colors.transparent,
-                                                        highlightColor:
-                                                            Colors.transparent,
-                                                        onTap: () async {
-                                                          await showAlignedDialog(
-                                                            context: context,
-                                                            isGlobal: false,
-                                                            avoidOverflow:
-                                                                false,
-                                                            targetAnchor:
-                                                                AlignmentDirectional(
-                                                                        0.0,
-                                                                        0.0)
-                                                                    .resolve(
-                                                                        Directionality.of(
-                                                                            context)),
-                                                            followerAnchor:
-                                                                AlignmentDirectional(
-                                                                        1.0,
-                                                                        0.0)
-                                                                    .resolve(
-                                                                        Directionality.of(
-                                                                            context)),
-                                                            builder:
-                                                                (dialogContext) {
-                                                              return Material(
-                                                                color: Colors
-                                                                    .transparent,
-                                                                child:
-                                                                    GestureDetector(
-                                                                  onTap: () => _model
-                                                                          .unfocusNode
-                                                                          .canRequestFocus
-                                                                      ? FocusScope.of(
-                                                                              context)
-                                                                          .requestFocus(_model
-                                                                              .unfocusNode)
-                                                                      : FocusScope.of(
-                                                                              context)
-                                                                          .unfocus(),
-                                                                  child:
-                                                                      Container(
-                                                                    height:
-                                                                        320.0,
-                                                                    width:
-                                                                        300.0,
-                                                                    child:
-                                                                        MenuComponentWidget(
-                                                                      menus: [
-                                                                        'Add Member',
-                                                                        'Remove Member',
-                                                                        'Upload Media',
-                                                                        'Edit Team Stats',
-                                                                        'Remove Team'
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ),
-                                                              );
-                                                            },
-                                                          ).then((value) =>
-                                                              safeSetState(() =>
-                                                                  _model.menuAction =
-                                                                      value));
-
-                                                          if ((_model.menuAction !=
-                                                                      null &&
-                                                                  _model.menuAction !=
-                                                                      '') &&
-                                                              (_model.menuAction !=
-                                                                  'CANCEL') &&
-                                                              (_model.menuAction !=
-                                                                  'Remove Team')) {
-                                                            context.pushNamed(
-                                                              'UpdateTeam',
-                                                              queryParameters: {
-                                                                'pageTitle':
-                                                                    serializeParam(
-                                                                  _model
-                                                                      .menuAction,
-                                                                  ParamType
-                                                                      .String,
-                                                                ),
-                                                                'team':
-                                                                    serializeParam(
-                                                                  listViewTeamsRecord,
-                                                                  ParamType
-                                                                      .Document,
-                                                                ),
-                                                              }.withoutNulls,
-                                                              extra: <String,
-                                                                  dynamic>{
-                                                                'team':
-                                                                    listViewTeamsRecord,
-                                                              },
-                                                            );
-                                                          } else {
-                                                            if (_model
-                                                                    .menuAction ==
-                                                                'Remove Team') {
-                                                              var confirmDialogResponse =
-                                                                  await showDialog<
-                                                                          bool>(
-                                                                        context:
-                                                                            context,
-                                                                        builder:
-                                                                            (alertDialogContext) {
-                                                                          return AlertDialog(
-                                                                            title:
-                                                                                Text('Remove Team'),
-                                                                            content:
-                                                                                Text('Are you sure you want to remove team?'),
-                                                                            actions: [
-                                                                              TextButton(
-                                                                                onPressed: () => Navigator.pop(alertDialogContext, false),
-                                                                                child: Text('Cancel'),
-                                                                              ),
-                                                                              TextButton(
-                                                                                onPressed: () => Navigator.pop(alertDialogContext, true),
-                                                                                child: Text('Confirm'),
-                                                                              ),
-                                                                            ],
-                                                                          );
-                                                                        },
-                                                                      ) ??
-                                                                      false;
-                                                              if (confirmDialogResponse) {
-                                                                await listViewTeamsRecord
-                                                                    .reference
-                                                                    .update(
-                                                                        createTeamsRecordData(
-                                                                  isDeleted:
-                                                                      true,
-                                                                ));
-                                                              }
-                                                            }
-                                                          }
-
-                                                          setState(() {});
-                                                        },
-                                                        child: Icon(
-                                                          Icons.more_vert,
-                                                          color: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .secondaryText,
-                                                          size: 24.0,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
+                                                      .primary,
+                                                ),
                                               ),
                                             ),
                                           );
-                                        },
-                                      );
-                                    },
+                                        }
+                                        List<TeamsRecord>
+                                            listViewTeamsRecordList =
+                                            snapshot.data!;
+                                        return ListView.builder(
+                                          padding: EdgeInsets.zero,
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.vertical,
+                                          itemCount:
+                                              listViewTeamsRecordList.length,
+                                          itemBuilder:
+                                              (context, listViewIndex) {
+                                            final listViewTeamsRecord =
+                                                listViewTeamsRecordList[
+                                                    listViewIndex];
+                                            return Container(
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondaryBackground,
+                                              ),
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        10.0, 10.0, 10.0, 10.0),
+                                                child: Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  children: [
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0.0,
+                                                                  0.0,
+                                                                  10.0,
+                                                                  0.0),
+                                                      child: Container(
+                                                        width: 30.0,
+                                                        height: 30.0,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .secondaryBackground,
+                                                          image:
+                                                              DecorationImage(
+                                                            fit: BoxFit.cover,
+                                                            image:
+                                                                Image.network(
+                                                              listViewTeamsRecord
+                                                                  .teamIcon,
+                                                            ).image,
+                                                          ),
+                                                          shape:
+                                                              BoxShape.circle,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      listViewTeamsRecord.name,
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .labelLarge
+                                                          .override(
+                                                            fontFamily:
+                                                                'Roboto',
+                                                            letterSpacing: 0.0,
+                                                          ),
+                                                    ),
+                                                    Expanded(
+                                                      child: Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    10.0,
+                                                                    0.0,
+                                                                    0.0,
+                                                                    0.0),
+                                                        child: Text(
+                                                          listViewTeamsRecord
+                                                              .teamOwner,
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .labelLarge
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Roboto',
+                                                                letterSpacing:
+                                                                    0.0,
+                                                              ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    Builder(
+                                                      builder: (context) =>
+                                                          Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    0.0,
+                                                                    10.0,
+                                                                    0.0),
+                                                        child: InkWell(
+                                                          splashColor: Colors
+                                                              .transparent,
+                                                          focusColor: Colors
+                                                              .transparent,
+                                                          hoverColor: Colors
+                                                              .transparent,
+                                                          highlightColor: Colors
+                                                              .transparent,
+                                                          onTap: () async {
+                                                            await showAlignedDialog(
+                                                              context: context,
+                                                              isGlobal: false,
+                                                              avoidOverflow:
+                                                                  true,
+                                                              targetAnchor:
+                                                                  AlignmentDirectional(
+                                                                          -1.0,
+                                                                          1.0)
+                                                                      .resolve(
+                                                                          Directionality.of(
+                                                                              context)),
+                                                              followerAnchor:
+                                                                  AlignmentDirectional(
+                                                                          0.0,
+                                                                          0.0)
+                                                                      .resolve(
+                                                                          Directionality.of(
+                                                                              context)),
+                                                              builder:
+                                                                  (dialogContext) {
+                                                                return Material(
+                                                                  color: Colors
+                                                                      .transparent,
+                                                                  child:
+                                                                      GestureDetector(
+                                                                    onTap: () => _model
+                                                                            .unfocusNode
+                                                                            .canRequestFocus
+                                                                        ? FocusScope.of(context).requestFocus(_model
+                                                                            .unfocusNode)
+                                                                        : FocusScope.of(context)
+                                                                            .unfocus(),
+                                                                    child:
+                                                                        Container(
+                                                                      height:
+                                                                          385.0,
+                                                                      width:
+                                                                          300.0,
+                                                                      child:
+                                                                          MenuComponentWidget(
+                                                                        menus: [
+                                                                          'Add Member',
+                                                                          'Remove Member',
+                                                                          'Upload Media',
+                                                                          'Edit Team Stats',
+                                                                          'Remove Team',
+                                                                          'Team Icon'
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                );
+                                                              },
+                                                            ).then((value) =>
+                                                                safeSetState(() =>
+                                                                    _model.menuAction =
+                                                                        value));
+
+                                                            if ((_model.menuAction !=
+                                                                        null &&
+                                                                    _model.menuAction !=
+                                                                        '') &&
+                                                                (_model.menuAction !=
+                                                                    'CANCEL') &&
+                                                                (_model.menuAction !=
+                                                                    'Remove Team')) {
+                                                              context.pushNamed(
+                                                                'UpdateTeam',
+                                                                queryParameters:
+                                                                    {
+                                                                  'pageTitle':
+                                                                      serializeParam(
+                                                                    _model
+                                                                        .menuAction,
+                                                                    ParamType
+                                                                        .String,
+                                                                  ),
+                                                                  'team':
+                                                                      serializeParam(
+                                                                    listViewTeamsRecord,
+                                                                    ParamType
+                                                                        .Document,
+                                                                  ),
+                                                                }.withoutNulls,
+                                                                extra: <String,
+                                                                    dynamic>{
+                                                                  'team':
+                                                                      listViewTeamsRecord,
+                                                                },
+                                                              );
+                                                            } else {
+                                                              if (_model
+                                                                      .menuAction ==
+                                                                  'Remove Team') {
+                                                                var confirmDialogResponse =
+                                                                    await showDialog<
+                                                                            bool>(
+                                                                          context:
+                                                                              context,
+                                                                          builder:
+                                                                              (alertDialogContext) {
+                                                                            return AlertDialog(
+                                                                              title: Text('Remove Team'),
+                                                                              content: Text('Are you sure you want to remove team?'),
+                                                                              actions: [
+                                                                                TextButton(
+                                                                                  onPressed: () => Navigator.pop(alertDialogContext, false),
+                                                                                  child: Text('Cancel'),
+                                                                                ),
+                                                                                TextButton(
+                                                                                  onPressed: () => Navigator.pop(alertDialogContext, true),
+                                                                                  child: Text('Confirm'),
+                                                                                ),
+                                                                              ],
+                                                                            );
+                                                                          },
+                                                                        ) ??
+                                                                        false;
+                                                                if (confirmDialogResponse) {
+                                                                  await listViewTeamsRecord
+                                                                      .reference
+                                                                      .update(
+                                                                          createTeamsRecordData(
+                                                                    isDeleted:
+                                                                        true,
+                                                                  ));
+                                                                }
+                                                              }
+                                                            }
+
+                                                            setState(() {});
+                                                          },
+                                                          child: Icon(
+                                                            Icons.more_vert,
+                                                            color: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .secondaryText,
+                                                            size: 24.0,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                    ),
                                   ),
                                   Padding(
                                     padding: EdgeInsetsDirectional.fromSTEB(

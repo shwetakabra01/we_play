@@ -73,10 +73,11 @@ class _OnboardingViewsLoggedInWidgetState
       }
     });
 
-    _model.emailIdController ??= TextEditingController(text: currentUserEmail);
+    _model.emailIdTextController ??=
+        TextEditingController(text: currentUserEmail);
     _model.emailIdFocusNode ??= FocusNode();
     _model.emailIdFocusNode!.addListener(() => setState(() {}));
-    _model.fullNameController ??=
+    _model.fullNameTextController ??=
         TextEditingController(text: currentUserDisplayName);
     _model.fullNameFocusNode ??= FocusNode();
     _model.fullNameFocusNode!.addListener(() => setState(() {}));
@@ -158,10 +159,10 @@ class _OnboardingViewsLoggedInWidgetState
                                 padding: EdgeInsetsDirectional.fromSTEB(
                                     8.0, 0.0, 8.0, 0.0),
                                 child: TextFormField(
-                                  controller: _model.emailIdController,
+                                  controller: _model.emailIdTextController,
                                   focusNode: _model.emailIdFocusNode,
                                   onChanged: (_) => EasyDebounce.debounce(
-                                    '_model.emailIdController',
+                                    '_model.emailIdTextController',
                                     Duration(milliseconds: 1500),
                                     () => setState(() {}),
                                   ),
@@ -230,9 +231,9 @@ class _OnboardingViewsLoggedInWidgetState
                                         fontFamily: 'Roboto',
                                         letterSpacing: 0.0,
                                       ),
-                                  minLines: null,
                                   keyboardType: TextInputType.emailAddress,
-                                  validator: _model.emailIdControllerValidator
+                                  validator: _model
+                                      .emailIdTextControllerValidator
                                       .asValidator(context),
                                 ),
                               ),
@@ -244,8 +245,9 @@ class _OnboardingViewsLoggedInWidgetState
                         padding:
                             EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 5.0, 5.0),
                         child: FFButtonWidget(
-                          onPressed: (_model.emailIdController.text == null ||
-                                  _model.emailIdController.text == '')
+                          onPressed: (_model.emailIdTextController.text ==
+                                      null ||
+                                  _model.emailIdTextController.text == '')
                               ? null
                               : () async {
                                   if (_model.formKey.currentState == null ||
@@ -265,13 +267,13 @@ class _OnboardingViewsLoggedInWidgetState
                                           1.0)) {
                                     await currentUserReference!
                                         .update(createUsersRecordData(
-                                      email: _model.emailIdController.text,
+                                      email: _model.emailIdTextController.text,
                                       walletBalance: 0.0,
                                     ));
                                   } else {
                                     await currentUserReference!
                                         .update(createUsersRecordData(
-                                      email: _model.emailIdController.text,
+                                      email: _model.emailIdTextController.text,
                                     ));
                                   }
 
@@ -340,10 +342,10 @@ class _OnboardingViewsLoggedInWidgetState
                                     8.0, 0.0, 8.0, 0.0),
                                 child: AuthUserStreamWidget(
                                   builder: (context) => TextFormField(
-                                    controller: _model.fullNameController,
+                                    controller: _model.fullNameTextController,
                                     focusNode: _model.fullNameFocusNode,
                                     onChanged: (_) => EasyDebounce.debounce(
-                                      '_model.fullNameController',
+                                      '_model.fullNameTextController',
                                       Duration(milliseconds: 1500),
                                       () => setState(() {}),
                                     ),
@@ -416,9 +418,8 @@ class _OnboardingViewsLoggedInWidgetState
                                           fontFamily: 'Roboto',
                                           letterSpacing: 0.0,
                                         ),
-                                    minLines: null,
                                     validator: _model
-                                        .fullNameControllerValidator
+                                        .fullNameTextControllerValidator
                                         .asValidator(context),
                                   ),
                                 ),
@@ -431,25 +432,27 @@ class _OnboardingViewsLoggedInWidgetState
                         padding:
                             EdgeInsetsDirectional.fromSTEB(5.0, 0.0, 5.0, 5.0),
                         child: FFButtonWidget(
-                          onPressed: (_model.fullNameController.text == null ||
-                                  _model.fullNameController.text == '')
-                              ? null
-                              : () async {
-                                  if (_model.formKey.currentState == null ||
-                                      !_model.formKey.currentState!
-                                          .validate()) {
-                                    return;
-                                  }
+                          onPressed:
+                              (_model.fullNameTextController.text == null ||
+                                      _model.fullNameTextController.text == '')
+                                  ? null
+                                  : () async {
+                                      if (_model.formKey.currentState == null ||
+                                          !_model.formKey.currentState!
+                                              .validate()) {
+                                        return;
+                                      }
 
-                                  await currentUserReference!
-                                      .update(createUsersRecordData(
-                                    displayName: _model.fullNameController.text,
-                                  ));
-                                  await _model.pageViewController?.nextPage(
-                                    duration: Duration(milliseconds: 300),
-                                    curve: Curves.ease,
-                                  );
-                                },
+                                      await currentUserReference!
+                                          .update(createUsersRecordData(
+                                        displayName:
+                                            _model.fullNameTextController.text,
+                                      ));
+                                      await _model.pageViewController?.nextPage(
+                                        duration: Duration(milliseconds: 300),
+                                        curve: Curves.ease,
+                                      );
+                                    },
                           text: 'Continue',
                           options: FFButtonOptions(
                             width: MediaQuery.sizeOf(context).width * 1.0,
@@ -511,7 +514,8 @@ class _OnboardingViewsLoggedInWidgetState
                                 builder: (context) => FlutterFlowChoiceChips(
                                   options: [
                                     ChipData('Male', FontAwesomeIcons.male),
-                                    ChipData('Female', FontAwesomeIcons.female)
+                                    ChipData('Female', FontAwesomeIcons.female),
+                                    ChipData('Other', Icons.transgender_sharp)
                                   ],
                                   onChanged: (val) => setState(() => _model
                                       .genderSelectValue = val?.firstOrNull),

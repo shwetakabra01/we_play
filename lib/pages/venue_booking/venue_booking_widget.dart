@@ -80,7 +80,7 @@ class _VenueBookingWidgetState extends State<VenueBookingWidget> {
       });
     });
 
-    _model.participantsController ??= TextEditingController();
+    _model.participantsTextController ??= TextEditingController();
     _model.participantsFocusNode ??= FocusNode();
   }
 
@@ -228,7 +228,7 @@ class _VenueBookingWidgetState extends State<VenueBookingWidget> {
                                           _model.bookingCost);
                                 });
                                 setState(() {
-                                  _model.participantsController?.text =
+                                  _model.participantsTextController?.text =
                                       _model.turfPlayers!.toString();
                                 });
                               },
@@ -1260,12 +1260,12 @@ class _VenueBookingWidgetState extends State<VenueBookingWidget> {
                             highlightColor: Colors.transparent,
                             onTap: () async {
                               setState(() {
-                                _model.participantsController?.text =
+                                _model.participantsTextController?.text =
                                     ((String value) {
                                   return int.parse(value) == 1
                                       ? '1'
                                       : (int.parse(value) - 1).toString();
-                                }(_model.participantsController.text));
+                                }(_model.participantsTextController.text));
                               });
                             },
                             child: FaIcon(
@@ -1281,7 +1281,7 @@ class _VenueBookingWidgetState extends State<VenueBookingWidget> {
                               child: Container(
                                 width: 70.0,
                                 child: TextFormField(
-                                  controller: _model.participantsController,
+                                  controller: _model.participantsTextController,
                                   focusNode: _model.participantsFocusNode,
                                   autofocus: false,
                                   readOnly: _model.turfPlayers == null,
@@ -1341,9 +1341,8 @@ class _VenueBookingWidgetState extends State<VenueBookingWidget> {
                                         letterSpacing: 0.0,
                                       ),
                                   textAlign: TextAlign.center,
-                                  minLines: null,
                                   validator: _model
-                                      .participantsControllerValidator
+                                      .participantsTextControllerValidator
                                       .asValidator(context),
                                 ),
                               ),
@@ -1356,9 +1355,10 @@ class _VenueBookingWidgetState extends State<VenueBookingWidget> {
                             highlightColor: Colors.transparent,
                             onTap: () async {
                               setState(() {
-                                _model.participantsController?.text =
+                                _model.participantsTextController?.text =
                                     ((int.parse(_model
-                                                .participantsController.text) +
+                                                .participantsTextController
+                                                .text) +
                                             1)
                                         .toString());
                               });
@@ -1389,9 +1389,9 @@ class _VenueBookingWidgetState extends State<VenueBookingWidget> {
                     ),
                     if ((_model.validations != null) &&
                         !_model.validations!.participantCount &&
-                        ((_model.participantsController.text == null ||
-                                _model.participantsController.text == '') ||
-                            (_model.participantsController.text == '0')))
+                        ((_model.participantsTextController.text == null ||
+                                _model.participantsTextController.text == '') ||
+                            (_model.participantsTextController.text == '0')))
                       Padding(
                         padding:
                             EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 0.0, 0.0),
@@ -1583,13 +1583,14 @@ class _VenueBookingWidgetState extends State<VenueBookingWidget> {
                                           (_model.datePicked != null)
                                       ..time = _model.startTimeBtn != -1
                                       ..participantCount = (_model
-                                                      .participantsController
+                                                      .participantsTextController
                                                       .text !=
                                                   null &&
-                                              _model.participantsController
+                                              _model.participantsTextController
                                                       .text !=
                                                   '') &&
-                                          (_model.participantsController.text !=
+                                          (_model.participantsTextController
+                                                  .text !=
                                               '0'),
                                   );
                                   _model.updateValidationsStruct(
@@ -1603,23 +1604,26 @@ class _VenueBookingWidgetState extends State<VenueBookingWidget> {
                                           _model.validations!.participantCount,
                                   );
                                   if (_model.validations!.formValid) {
-                                    _model.organizerShare = _model
-                                            .spliCostValue!
-                                        ? ((double cost, String? participants,
-                                                double discount) {
-                                            return participants == null
-                                                ? 0.0
-                                                : (cost - discount) * 0.3;
-                                          }(
-                                            _model.bookingCost,
-                                            _model.participantsController.text,
-                                            functions.getDiscountAmount(
+                                    _model.organizerShare =
+                                        _model.spliCostValue!
+                                            ? ((double cost,
+                                                    String? participants,
+                                                    double discount) {
+                                                return participants == null
+                                                    ? 0.0
+                                                    : (cost - discount) * 0.3;
+                                              }(
                                                 _model.bookingCost,
-                                                _model.applicableOffer)))
-                                        : (_model.bookingCost -
-                                            functions.getDiscountAmount(
-                                                _model.bookingCost,
-                                                _model.applicableOffer));
+                                                _model
+                                                    .participantsTextController
+                                                    .text,
+                                                functions.getDiscountAmount(
+                                                    _model.bookingCost,
+                                                    _model.applicableOffer)))
+                                            : (_model.bookingCost -
+                                                functions.getDiscountAmount(
+                                                    _model.bookingCost,
+                                                    _model.applicableOffer));
                                     if (valueOrDefault(
                                             currentUserDocument?.walletBalance,
                                             0.0) >=
@@ -1677,7 +1681,7 @@ class _VenueBookingWidgetState extends State<VenueBookingWidget> {
                                           jwtToken: currentJwtToken,
                                           venueId: widget.venue?.reference.id,
                                           playersCapacity: int.tryParse(_model
-                                              .participantsController.text),
+                                              .participantsTextController.text),
                                           sport: _model.availsportsValue,
                                           eventDate: functions
                                               .getDateTimeFromString(

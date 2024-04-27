@@ -629,57 +629,15 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                             DataColumn2(
                                               label: DefaultTextStyle.merge(
                                                 softWrap: true,
-                                                child: Text(
-                                                  'Team Size',
-                                                  textAlign: TextAlign.center,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .labelLarge
-                                                      .override(
-                                                        fontFamily: 'Roboto',
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                                ),
+                                                child: Container(),
                                               ),
-                                              fixedWidth: 90.0,
+                                              fixedWidth: 0.0,
                                             ),
                                             DataColumn2(
                                               label: DefaultTextStyle.merge(
                                                 softWrap: true,
                                                 child: Text(
                                                   'W',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .labelLarge
-                                                      .override(
-                                                        fontFamily: 'Roboto',
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                                ),
-                                              ),
-                                              fixedWidth: 50.0,
-                                            ),
-                                            DataColumn2(
-                                              label: DefaultTextStyle.merge(
-                                                softWrap: true,
-                                                child: Text(
-                                                  'L',
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .labelLarge
-                                                      .override(
-                                                        fontFamily: 'Roboto',
-                                                        letterSpacing: 0.0,
-                                                      ),
-                                                ),
-                                              ),
-                                              fixedWidth: 50.0,
-                                            ),
-                                            DataColumn2(
-                                              label: DefaultTextStyle.merge(
-                                                softWrap: true,
-                                                child: Text(
-                                                  'D',
                                                   style: FlutterFlowTheme.of(
                                                           context)
                                                       .labelLarge
@@ -750,40 +708,9 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                                           letterSpacing: 0.0,
                                                         ),
                                               ),
-                                              Text(
-                                                teamsItem.members.length
-                                                    .toString(),
-                                                textAlign: TextAlign.center,
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .labelLarge
-                                                        .override(
-                                                          fontFamily: 'Roboto',
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                              ),
+                                              Container(),
                                               Text(
                                                 teamsItem.won.toString(),
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .labelLarge
-                                                        .override(
-                                                          fontFamily: 'Roboto',
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                              ),
-                                              Text(
-                                                teamsItem.lost.toString(),
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .labelLarge
-                                                        .override(
-                                                          fontFamily: 'Roboto',
-                                                          letterSpacing: 0.0,
-                                                        ),
-                                              ),
-                                              Text(
-                                                teamsItem.draw.toString(),
                                                 style:
                                                     FlutterFlowTheme.of(context)
                                                         .labelLarge

@@ -267,6 +267,11 @@ class _ScoreGoalWidgetState extends State<ScoreGoalWidget> {
                                               team: widget.team1?.reference,
                                               datetime: getCurrentTimestamp,
                                               timer: widget.timer,
+                                              vsTeam: widget.teamEventP?.team1
+                                                          ?.id ==
+                                                      widget.team1?.reference.id
+                                                  ? widget.teamEventP?.team2
+                                                  : widget.teamEventP?.team1,
                                               clearUnsetFields: false,
                                             ),
                                             true,
@@ -287,6 +292,11 @@ class _ScoreGoalWidgetState extends State<ScoreGoalWidget> {
                                               team: widget.team1?.reference,
                                               datetime: getCurrentTimestamp,
                                               timer: widget.timer,
+                                              vsTeam: widget.teamEventP?.team1
+                                                          ?.id ==
+                                                      widget.team1?.reference.id
+                                                  ? widget.teamEventP?.team2
+                                                  : widget.teamEventP?.team1,
                                               clearUnsetFields: false,
                                             ),
                                             true,
@@ -307,6 +317,11 @@ class _ScoreGoalWidgetState extends State<ScoreGoalWidget> {
                                               team: widget.team1?.reference,
                                               datetime: getCurrentTimestamp,
                                               timer: widget.timer,
+                                              vsTeam: widget.teamEventP?.team1
+                                                          ?.id ==
+                                                      widget.team1?.reference.id
+                                                  ? widget.teamEventP?.team2
+                                                  : widget.teamEventP?.team1,
                                               clearUnsetFields: false,
                                             ),
                                             true,
@@ -327,6 +342,11 @@ class _ScoreGoalWidgetState extends State<ScoreGoalWidget> {
                                               team: widget.team1?.reference,
                                               datetime: getCurrentTimestamp,
                                               timer: widget.timer,
+                                              vsTeam: widget.teamEventP?.team1
+                                                          ?.id ==
+                                                      widget.team1?.reference.id
+                                                  ? widget.teamEventP?.team2
+                                                  : widget.teamEventP?.team1,
                                               clearUnsetFields: false,
                                             ),
                                             true,
@@ -347,6 +367,11 @@ class _ScoreGoalWidgetState extends State<ScoreGoalWidget> {
                                               team: widget.team1?.reference,
                                               datetime: getCurrentTimestamp,
                                               timer: widget.timer,
+                                              vsTeam: widget.teamEventP?.team1
+                                                          ?.id ==
+                                                      widget.team1?.reference.id
+                                                  ? widget.teamEventP?.team2
+                                                  : widget.teamEventP?.team1,
                                               clearUnsetFields: false,
                                             ),
                                             true,
@@ -367,6 +392,11 @@ class _ScoreGoalWidgetState extends State<ScoreGoalWidget> {
                                               team: widget.team1?.reference,
                                               datetime: getCurrentTimestamp,
                                               timer: widget.timer,
+                                              vsTeam: widget.teamEventP?.team1
+                                                          ?.id ==
+                                                      widget.team1?.reference.id
+                                                  ? widget.teamEventP?.team2
+                                                  : widget.teamEventP?.team1,
                                               clearUnsetFields: false,
                                             ),
                                             true,

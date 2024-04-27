@@ -4,6 +4,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_video_player.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/flutter_flow/custom_functions.dart' as functions;
 import 'team_details_widget.dart' show TeamDetailsWidget;
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
@@ -21,13 +22,13 @@ class TeamDetailsModel extends FlutterFlowModel<TeamDetailsWidget> {
 
   final unfocusNode = FocusNode();
   // State field(s) for Expandable widget.
-  late ExpandableController expandableController1;
+  late ExpandableController expandableExpandableController1;
 
   // State field(s) for Expandable widget.
-  late ExpandableController expandableController2;
+  late ExpandableController expandableExpandableController2;
 
   // State field(s) for Expandable widget.
-  late ExpandableController expandableController3;
+  late ExpandableController expandableExpandableController3;
 
   @override
   void initState(BuildContext context) {}
@@ -35,8 +36,8 @@ class TeamDetailsModel extends FlutterFlowModel<TeamDetailsWidget> {
   @override
   void dispose() {
     unfocusNode.dispose();
-    expandableController1.dispose();
-    expandableController2.dispose();
-    expandableController3.dispose();
+    expandableExpandableController1.dispose();
+    expandableExpandableController2.dispose();
+    expandableExpandableController3.dispose();
   }
 }

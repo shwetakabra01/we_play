@@ -18,10 +18,10 @@
   },
   "scripts": {
     "lint": "./node_modules/.bin/eslint --max-warnings=0 .",
-    "serve": "firebase -P playprod-2b863 emulators:start --only functions",
-    "shell": "firebase -P playprod-2b863 functions:shell",
+    "serve": "firebase -P play-e84eb emulators:start --only functions",
+    "shell": "firebase -P play-e84eb functions:shell",
     "start": "npm run shell",
-    "logs": "firebase -P playprod-2b863 functions:log",
+    "logs": "firebase -P play-e84eb functions:log",
     "compile": "cp ../../tsconfig.template.json ./tsconfig-compile.json && tsc --project tsconfig-compile.json"
   },
   "engines": {

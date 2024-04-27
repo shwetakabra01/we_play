@@ -30,10 +30,10 @@ class _CreateTeamWidgetState extends State<CreateTeamWidget> {
     super.initState();
     _model = createModel(context, () => CreateTeamModel());
 
-    _model.teamNameController ??= TextEditingController();
+    _model.teamNameTextController ??= TextEditingController();
     _model.teamNameFocusNode ??= FocusNode();
 
-    _model.teamOwnerController ??= TextEditingController();
+    _model.teamOwnerTextController ??= TextEditingController();
     _model.teamOwnerFocusNode ??= FocusNode();
   }
 
@@ -91,7 +91,7 @@ class _CreateTeamWidgetState extends State<CreateTeamWidget> {
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
                 child: TextFormField(
-                  controller: _model.teamNameController,
+                  controller: _model.teamNameTextController,
                   focusNode: _model.teamNameFocusNode,
                   autofocus: true,
                   obscureText: false,
@@ -141,15 +141,14 @@ class _CreateTeamWidgetState extends State<CreateTeamWidget> {
                         fontFamily: 'Roboto',
                         letterSpacing: 0.0,
                       ),
-                  minLines: null,
-                  validator:
-                      _model.teamNameControllerValidator.asValidator(context),
+                  validator: _model.teamNameTextControllerValidator
+                      .asValidator(context),
                 ),
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
                 child: TextFormField(
-                  controller: _model.teamOwnerController,
+                  controller: _model.teamOwnerTextController,
                   focusNode: _model.teamOwnerFocusNode,
                   autofocus: true,
                   obscureText: false,
@@ -199,9 +198,8 @@ class _CreateTeamWidgetState extends State<CreateTeamWidget> {
                         fontFamily: 'Roboto',
                         letterSpacing: 0.0,
                       ),
-                  minLines: null,
-                  validator:
-                      _model.teamOwnerControllerValidator.asValidator(context),
+                  validator: _model.teamOwnerTextControllerValidator
+                      .asValidator(context),
                 ),
               ),
               Padding(
@@ -344,9 +342,9 @@ class _CreateTeamWidgetState extends State<CreateTeamWidget> {
                     await TeamsRecord.collection
                         .doc()
                         .set(createTeamsRecordData(
-                          name: _model.teamNameController.text,
+                          name: _model.teamNameTextController.text,
                           teamIcon: _model.uploadedFileUrl,
-                          teamOwner: _model.teamOwnerController.text,
+                          teamOwner: _model.teamOwnerTextController.text,
                           isDeleted: false,
                           won: 0,
                           draw: 0,

@@ -72,6 +72,11 @@ class TeamsRecord extends FirestoreRecord {
   bool get isDeleted => _isDeleted ?? false;
   bool hasIsDeleted() => _isDeleted != null;
 
+  // "teamFullName" field.
+  String? _teamFullName;
+  String get teamFullName => _teamFullName ?? '';
+  bool hasTeamFullName() => _teamFullName != null;
+
   void _initializeFields() {
     _name = snapshotData['name'] as String?;
     _teamIcon = snapshotData['teamIcon'] as String?;
@@ -87,6 +92,7 @@ class TeamsRecord extends FirestoreRecord {
       TeamMemberStruct.fromMap,
     );
     _isDeleted = snapshotData['isDeleted'] as bool?;
+    _teamFullName = snapshotData['teamFullName'] as String?;
   }
 
   static CollectionReference get collection =>
@@ -130,6 +136,7 @@ Map<String, dynamic> createTeamsRecordData({
   int? draw,
   int? lost,
   bool? isDeleted,
+  String? teamFullName,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -140,6 +147,7 @@ Map<String, dynamic> createTeamsRecordData({
       'draw': draw,
       'lost': lost,
       'isDeleted': isDeleted,
+      'teamFullName': teamFullName,
     }.withoutNulls,
   );
 
@@ -162,7 +170,8 @@ class TeamsRecordDocumentEquality implements Equality<TeamsRecord> {
         listEquality.equals(e1?.videos, e2?.videos) &&
         listEquality.equals(e1?.memberRefs, e2?.memberRefs) &&
         listEquality.equals(e1?.members, e2?.members) &&
-        e1?.isDeleted == e2?.isDeleted;
+        e1?.isDeleted == e2?.isDeleted &&
+        e1?.teamFullName == e2?.teamFullName;
   }
 
   @override
@@ -177,7 +186,8 @@ class TeamsRecordDocumentEquality implements Equality<TeamsRecord> {
         e?.videos,
         e?.memberRefs,
         e?.members,
-        e?.isDeleted
+        e?.isDeleted,
+        e?.teamFullName
       ]);
 
   @override

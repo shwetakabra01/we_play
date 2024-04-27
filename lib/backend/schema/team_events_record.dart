@@ -107,6 +107,11 @@ class TeamEventsRecord extends FirestoreRecord {
   DateTime? get endTime => _endTime;
   bool hasEndTime() => _endTime != null;
 
+  // "matchResult" field.
+  int? _matchResult;
+  int get matchResult => _matchResult ?? 0;
+  bool hasMatchResult() => _matchResult != null;
+
   void _initializeFields() {
     _team1 = snapshotData['team1'] as DocumentReference?;
     _team2 = snapshotData['team2'] as DocumentReference?;
@@ -144,6 +149,7 @@ class TeamEventsRecord extends FirestoreRecord {
     _lastStartTime = snapshotData['lastStartTime'] as DateTime?;
     _startTime = snapshotData['startTime'] as DateTime?;
     _endTime = snapshotData['endTime'] as DateTime?;
+    _matchResult = castToType<int>(snapshotData['matchResult']);
   }
 
   static CollectionReference get collection =>
@@ -191,6 +197,7 @@ Map<String, dynamic> createTeamEventsRecordData({
   DateTime? lastStartTime,
   DateTime? startTime,
   DateTime? endTime,
+  int? matchResult,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -204,6 +211,7 @@ Map<String, dynamic> createTeamEventsRecordData({
       'lastStartTime': lastStartTime,
       'startTime': startTime,
       'endTime': endTime,
+      'matchResult': matchResult,
     }.withoutNulls,
   );
 
@@ -233,7 +241,8 @@ class TeamEventsRecordDocumentEquality implements Equality<TeamEventsRecord> {
         e1?.durationAtPause == e2?.durationAtPause &&
         e1?.lastStartTime == e2?.lastStartTime &&
         e1?.startTime == e2?.startTime &&
-        e1?.endTime == e2?.endTime;
+        e1?.endTime == e2?.endTime &&
+        e1?.matchResult == e2?.matchResult;
   }
 
   @override
@@ -255,7 +264,8 @@ class TeamEventsRecordDocumentEquality implements Equality<TeamEventsRecord> {
         e?.durationAtPause,
         e?.lastStartTime,
         e?.startTime,
-        e?.endTime
+        e?.endTime,
+        e?.matchResult
       ]);
 
   @override

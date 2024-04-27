@@ -20,3 +20,8 @@ export '/pages/fixture_details/fixture_details_widget.dart'
     show FixtureDetailsWidget;
 export '/pages/team_details/team_details_widget.dart' show TeamDetailsWidget;
 export '/home_nav_copy/home_nav_copy_widget.dart' show HomeNavCopyWidget;
+export '/chat/chat_2_details/chat2_details_widget.dart' show Chat2DetailsWidget;
+export '/chat/chat_2_main/chat2_main_widget.dart' show Chat2MainWidget;
+export '/chat/chat_2_invite_users/chat2_invite_users_widget.dart'
+    show Chat2InviteUsersWidget;
+export '/chat/image_details/image_details_widget.dart' show ImageDetailsWidget;

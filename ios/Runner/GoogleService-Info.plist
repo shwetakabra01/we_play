@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyAyogLuxPasm8U2gQeB4li5m_8CmrYZe3U</string>
+	<string>AIzaSyDGTvVvwMH6PTk_P3JOM6e5AwcXOBd8MEE</string>
 	<key>GCM_SENDER_ID</key>
-	<string>999117315504</string>
+	<string>22858644809</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.autogrowth</string>
 	<key>PROJECT_ID</key>
-	<string>playprod-2b863</string>
+	<string>play-e84eb</string>
 	<key>STORAGE_BUCKET</key>
-	<string>playprod-2b863.appspot.com</string>
+	<string>play-e84eb.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:999117315504:ios:f971da8d7fd849ede30a75</string>
+	<string>1:22858644809:ios:fb62815839cc12a5d96e98</string>
 </dict>
 </plist>

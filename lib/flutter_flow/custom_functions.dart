@@ -259,3 +259,115 @@ int timeDifferenceInMillis(
 ) {
   return endTime.difference(startTime).inMilliseconds;
 }
+
+List<UserGoalsStruct> getUserGoals(List<TeamEventsRecord> matches) {
+  List<UserGoalsStruct> userGoals = [];
+
+  for (TeamEventsRecord match in matches) {
+    for (ScoreDetailsStruct goal in match.goals) {
+      bool found = false;
+      for (UserGoalsStruct userGoal in userGoals) {
+        if (userGoal.userRef == goal.player) {
+          found = true;
+          userGoal.goals += 1;
+          break;
+        }
+      }
+      if (!found) {
+        userGoals.add(
+            UserGoalsStruct(userRef: goal.player, goals: 1, team: goal.team));
+      }
+    }
+  }
+
+  userGoals.sort((a, b) => b.goals.compareTo(a.goals));
+
+  return userGoals;
+}
+
+List<PointsTableStruct> getPointsTable(
+  List<TeamsRecord> teams,
+  List<TeamEventsRecord> matches,
+) {
+  List<PointsTableStruct> pointsTable = [];
+
+  for (TeamsRecord team in teams) {
+    int played = 0;
+    int goals = 0;
+    int vsGoals = 0;
+
+    for (TeamEventsRecord match in matches) {
+      // Check if the team is playing in the match
+      if (match.team1 == team.reference || match.team2 == team.reference) {
+        played++;
+      }
+      for (ScoreDetailsStruct goal in match.goals) {
+        if (team.reference == goal.team) {
+          goals++;
+        }
+        if (team.reference == goal.vsTeam) {
+          vsGoals++;
+        }
+      }
+    }
+
+    // Add the team's data to the points table
+    pointsTable.add(PointsTableStruct(
+      teamRef: team.reference,
+      teamName: team.name,
+      teamIcon: team.teamIcon,
+      gf: goals,
+      ga: vsGoals,
+      gd: goals - vsGoals,
+      played: played,
+      won: team.won,
+      lost: team.lost,
+      draw: team.draw,
+      points: (team.won * 3) + team.draw,
+    ));
+  }
+
+  pointsTable.sort((a, b) {
+    return b.points.compareTo(a.points);
+  });
+  return pointsTable;
+}
+
+String getMemberRole(String dbRole) {
+  if (dbRole == 'GK') {
+    return 'GoalKeeper';
+  }
+  if (dbRole == 'DEF') {
+    return 'Defense';
+  }
+  if (dbRole == 'MID') {
+    return 'Midfielder';
+  }
+  if (dbRole == 'FWD') {
+    return 'Forward';
+  }
+  return 'Defender';
+}
+
+List<UsersRecord> getUsersNotInTeam(
+  List<UsersRecord> allUsers,
+  List<DocumentReference> memberRefs,
+) {
+  List<UsersRecord> users = [];
+  for (UsersRecord user in allUsers) {
+    if (!memberRefs.contains(user.reference)) {
+      users.add(user);
+    }
+  }
+  return users;
+}
+
+String base64EncodeFile(FFUploadedFile filePath) {
+  // base 64 encode file from filePath
+  String base64Image = base64Encode(filePath.bytes as List<int>);
+  return base64Image;
+}
+
+String? getFileName(FFUploadedFile? uploadedFile) {
+  return uploadedFile!.name;
+}

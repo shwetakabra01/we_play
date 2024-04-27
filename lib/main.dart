@@ -17,6 +17,7 @@ import 'index.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  GoRouter.optionURLReflectsImperativeAPIs = true;
   usePathUrlStrategy();
   await initFirebase();
 
@@ -117,7 +118,7 @@ class _NavBarPageState extends State<NavBarPage> {
       'HomeNav': HomeNavWidget(),
       'Play': PlayWidget(),
       'Venues': VenuesWidget(),
-      'Fixtures': FixturesWidget(),
+      'chat_2_main': Chat2MainWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
@@ -162,10 +163,10 @@ class _NavBarPageState extends State<NavBarPage> {
           ),
           BottomNavigationBarItem(
             icon: Icon(
-              Icons.filter,
+              Icons.forum_outlined,
               size: 24.0,
             ),
-            label: 'Fixtures',
+            label: '__',
             tooltip: '',
           )
         ],

@@ -152,8 +152,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             eventRef: params.getParam(
               'eventRef',
               ParamType.DocumentReference,
-              false,
-              ['events'],
+              isList: false,
+              collectionNamePath: ['events'],
             ),
             fromPage: params.getParam(
               'fromPage',
@@ -181,8 +181,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             venueRef: params.getParam(
               'venueRef',
               ParamType.DocumentReference,
-              false,
-              ['Venue'],
+              isList: false,
+              collectionNamePath: ['Venue'],
             ),
           ),
         ),
@@ -224,9 +224,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'Fixtures',
           path: '/fixtures',
           requireAuth: true,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'Fixtures')
-              : FixturesWidget(),
+          builder: (context, params) => FixturesWidget(),
         ),
         FFRoute(
           name: 'CreateTeam',
@@ -264,8 +262,8 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
             fixtureRef: params.getParam(
               'fixtureRef',
               ParamType.DocumentReference,
-              false,
-              ['teamEvents'],
+              isList: false,
+              collectionNamePath: ['teamEvents'],
             ),
             team1: params.getParam(
               'team1',
@@ -296,6 +294,57 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           path: '/homeNavCopy',
           requireAuth: true,
           builder: (context, params) => HomeNavCopyWidget(),
+        ),
+        FFRoute(
+          name: 'chat_2_Details',
+          path: '/chat2Details',
+          requireAuth: true,
+          asyncParams: {
+            'chatRef': getDoc(['chats'], ChatsRecord.fromSnapshot),
+          },
+          builder: (context, params) => Chat2DetailsWidget(
+            chatRef: params.getParam(
+              'chatRef',
+              ParamType.Document,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'chat_2_main',
+          path: '/chat2Main',
+          requireAuth: true,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'chat_2_main')
+              : Chat2MainWidget(),
+        ),
+        FFRoute(
+          name: 'chat_2_InviteUsers',
+          path: '/chat2InviteUsers',
+          requireAuth: true,
+          asyncParams: {
+            'chatRef': getDoc(['chats'], ChatsRecord.fromSnapshot),
+          },
+          builder: (context, params) => Chat2InviteUsersWidget(
+            chatRef: params.getParam(
+              'chatRef',
+              ParamType.Document,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'image_Details',
+          path: '/imageDetails',
+          requireAuth: true,
+          asyncParams: {
+            'chatMessage':
+                getDoc(['chat_messages'], ChatMessagesRecord.fromSnapshot),
+          },
+          builder: (context, params) => ImageDetailsWidget(
+            chatMessage: params.getParam(
+              'chatMessage',
+              ParamType.Document,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: [routeObserver],
@@ -373,7 +422,7 @@ extension _GoRouterStateExtensions on GoRouterState {
       extra != null ? extra as Map<String, dynamic> : {};
   Map<String, dynamic> get allParams => <String, dynamic>{}
     ..addAll(pathParameters)
-    ..addAll(queryParameters)
+    ..addAll(uri.queryParameters)
     ..addAll(extraMap);
   TransitionInfo get transitionInfo => extraMap.containsKey(kTransitionInfoKey)
       ? extraMap[kTransitionInfoKey] as TransitionInfo
@@ -392,7 +441,7 @@ class FFParameters {
   // present is the special extra parameter reserved for the transition info.
   bool get isEmpty =>
       state.allParams.isEmpty ||
-      (state.extraMap.length == 1 &&
+      (state.allParams.length == 1 &&
           state.extraMap.containsKey(kTransitionInfoKey));
   bool isAsyncParam(MapEntry<String, dynamic> param) =>
       asyncParams.containsKey(param.key) && param.value is String;
@@ -413,11 +462,11 @@ class FFParameters {
 
   dynamic getParam<T>(
     String paramName,
-    ParamType type, [
+    ParamType type, {
     bool isList = false,
     List<String>? collectionNamePath,
     StructBuilder<T>? structBuilder,
-  ]) {
+  }) {
     if (futureParamValues.containsKey(paramName)) {
       return futureParamValues[paramName];
     }
@@ -468,7 +517,7 @@ class FFRoute {
           }
 
           if (requireAuth && !appStateNotifier.loggedIn) {
-            appStateNotifier.setRedirectLocationIfUnset(state.location);
+            appStateNotifier.setRedirectLocationIfUnset(state.uri.toString());
             return '/onboardingViews';
           }
           return null;
@@ -547,7 +596,7 @@ class RootPageContext {
   static bool isInactiveRootPage(BuildContext context) {
     final rootPageContext = context.read<RootPageContext?>();
     final isRootPage = rootPageContext?.isRootPage ?? false;
-    final location = GoRouter.of(context).location;
+    final location = GoRouterState.of(context).uri.toString();
     return isRootPage &&
         location != '/' &&
         location != rootPageContext?.errorRoute;

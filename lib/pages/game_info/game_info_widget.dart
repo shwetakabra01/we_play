@@ -46,26 +46,28 @@ class _GameInfoWidgetState extends State<GameInfoWidget>
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
-  final animationsMap = {
-    'rowOnPageLoadAnimation': AnimationInfo(
-      trigger: AnimationTrigger.onPageLoad,
-      effects: [
-        ShakeEffect(
-          curve: Curves.easeInOut,
-          delay: 0.ms,
-          duration: 1000.ms,
-          hz: 10,
-          offset: Offset(0.0, 0.0),
-          rotation: 0.087,
-        ),
-      ],
-    ),
-  };
+  final animationsMap = <String, AnimationInfo>{};
 
   @override
   void initState() {
     super.initState();
     _model = createModel(context, () => GameInfoModel());
+
+    animationsMap.addAll({
+      'rowOnPageLoadAnimation': AnimationInfo(
+        trigger: AnimationTrigger.onPageLoad,
+        effectsBuilder: () => [
+          ShakeEffect(
+            curve: Curves.easeInOut,
+            delay: 0.0.ms,
+            duration: 1000.0.ms,
+            hz: 10,
+            offset: Offset(0.0, 0.0),
+            rotation: 0.087,
+          ),
+        ],
+      ),
+    });
   }
 
   @override
@@ -809,7 +811,7 @@ class _GameInfoWidgetState extends State<GameInfoWidget>
                                                           FFButtonWidget(
                                                         onPressed: () async {
                                                           await Share.share(
-                                                            'weplay://weplay.com${GoRouter.of(context).location}',
+                                                            'weplay://weplay.com${GoRouterState.of(context).uri.toString()}',
                                                             sharePositionOrigin:
                                                                 getWidgetBoundingBox(
                                                                     context),

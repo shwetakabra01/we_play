@@ -34,8 +34,8 @@ class InvitePlayerModel extends FlutterFlowModel<InvitePlayerWidget> {
   List<UsersRecord>? invitedUsers;
   // State field(s) for guests widget.
   FocusNode? guestsFocusNode;
-  TextEditingController? guestsController;
-  String? Function(BuildContext, String?)? guestsControllerValidator;
+  TextEditingController? guestsTextController;
+  String? Function(BuildContext, String?)? guestsTextControllerValidator;
 
   @override
   void initState(BuildContext context) {}
@@ -44,6 +44,6 @@ class InvitePlayerModel extends FlutterFlowModel<InvitePlayerWidget> {
   void dispose() {
     unfocusNode.dispose();
     guestsFocusNode?.dispose();
-    guestsController?.dispose();
+    guestsTextController?.dispose();
   }
 }
