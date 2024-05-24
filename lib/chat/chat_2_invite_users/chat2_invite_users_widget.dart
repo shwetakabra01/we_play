@@ -54,6 +54,8 @@ class _Chat2InviteUsersWidgetState extends State<Chat2InviteUsersWidget> {
         });
       }
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

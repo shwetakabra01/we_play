@@ -73,7 +73,7 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'WePlay',
+      title: 'WePlay: Uniting players one game at a time',
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
@@ -119,6 +119,7 @@ class _NavBarPageState extends State<NavBarPage> {
       'Play': PlayWidget(),
       'Venues': VenuesWidget(),
       'chat_2_main': Chat2MainWidget(),
+      'Collections': CollectionsWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
@@ -167,6 +168,14 @@ class _NavBarPageState extends State<NavBarPage> {
               size: 24.0,
             ),
             label: '__',
+            tooltip: '',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(
+              Icons.collections_outlined,
+              size: 24.0,
+            ),
+            label: 'Gallery',
             tooltip: '',
           )
         ],

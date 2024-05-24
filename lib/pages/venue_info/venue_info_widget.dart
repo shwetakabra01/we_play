@@ -33,6 +33,8 @@ class _VenueInfoWidgetState extends State<VenueInfoWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => VenueInfoModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -152,8 +154,8 @@ class _VenueInfoWidgetState extends State<VenueInfoWidget> {
                                               _model.carouselController ??=
                                                   CarouselController(),
                                           options: CarouselOptions(
-                                            initialPage:
-                                                min(1, photos.length - 1),
+                                            initialPage: max(
+                                                0, min(1, photos.length - 1)),
                                             viewportFraction: 1.0,
                                             disableCenter: true,
                                             enlargeCenterPage: true,

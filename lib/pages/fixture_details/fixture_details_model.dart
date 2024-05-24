@@ -43,6 +43,7 @@ class FixtureDetailsModel extends FlutterFlowModel<FixtureDetailsWidget> {
       tabBarController != null ? tabBarController!.index : 0;
 
   // State field(s) for Timer widget.
+  final timerInitialTimeMs = 0;
   int timerMilliseconds = 0;
   String timerValue = StopWatchTimer.getDisplayTime(
     0,

@@ -345,6 +345,44 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
               ParamType.Document,
             ),
           ),
+        ),
+        FFRoute(
+          name: 'Collections',
+          path: '/collections',
+          requireAuth: true,
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'Collections')
+              : CollectionsWidget(),
+        ),
+        FFRoute(
+          name: 'Gallery',
+          path: '/gallery',
+          requireAuth: true,
+          builder: (context, params) => GalleryWidget(
+            title: params.getParam(
+              'title',
+              ParamType.String,
+            ),
+            queryType: params.getParam(
+              'queryType',
+              ParamType.String,
+            ),
+          ),
+        ),
+        FFRoute(
+          name: 'GalleryCopy',
+          path: '/galleryCopy',
+          requireAuth: true,
+          builder: (context, params) => GalleryCopyWidget(
+            title: params.getParam(
+              'title',
+              ParamType.String,
+            ),
+            queryType: params.getParam(
+              'queryType',
+              ParamType.String,
+            ),
+          ),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
       observers: [routeObserver],
@@ -606,4 +644,14 @@ class RootPageContext {
         value: RootPageContext(true, errorRoute),
         child: child,
       );
+}
+
+extension GoRouterLocationExtension on GoRouter {
+  String getCurrentLocation() {
+    final RouteMatch lastMatch = routerDelegate.currentConfiguration.last;
+    final RouteMatchList matchList = lastMatch is ImperativeRouteMatch
+        ? lastMatch.matches
+        : routerDelegate.currentConfiguration;
+    return matchList.uri.toString();
+  }
 }

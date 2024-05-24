@@ -38,6 +38,8 @@ class _ChatDetailsOverlayWidgetState extends State<ChatDetailsOverlayWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ChatDetailsOverlayModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

@@ -39,6 +39,8 @@ class _CompleteProfileWidgetState extends State<CompleteProfileWidget> {
     _model.displayNameTextController ??=
         TextEditingController(text: currentUserDisplayName);
     _model.displayNameFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

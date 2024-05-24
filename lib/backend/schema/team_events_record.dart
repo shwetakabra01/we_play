@@ -37,11 +37,6 @@ class TeamEventsRecord extends FirestoreRecord {
   String get eventLocation => _eventLocation ?? '';
   bool hasEventLocation() => _eventLocation != null;
 
-  // "images" field.
-  List<String>? _images;
-  List<String> get images => _images ?? const [];
-  bool hasImages() => _images != null;
-
   // "videos" field.
   List<String>? _videos;
   List<String> get videos => _videos ?? const [];
@@ -112,12 +107,16 @@ class TeamEventsRecord extends FirestoreRecord {
   int get matchResult => _matchResult ?? 0;
   bool hasMatchResult() => _matchResult != null;
 
+  // "images" field.
+  List<String>? _images;
+  List<String> get images => _images ?? const [];
+  bool hasImages() => _images != null;
+
   void _initializeFields() {
     _team1 = snapshotData['team1'] as DocumentReference?;
     _team2 = snapshotData['team2'] as DocumentReference?;
     _eventDate = snapshotData['eventDate'] as DateTime?;
     _eventLocation = snapshotData['eventLocation'] as String?;
-    _images = getDataList(snapshotData['images']);
     _videos = getDataList(snapshotData['videos']);
     _goals = getStructList(
       snapshotData['goals'],
@@ -150,6 +149,7 @@ class TeamEventsRecord extends FirestoreRecord {
     _startTime = snapshotData['startTime'] as DateTime?;
     _endTime = snapshotData['endTime'] as DateTime?;
     _matchResult = castToType<int>(snapshotData['matchResult']);
+    _images = getDataList(snapshotData['images']);
   }
 
   static CollectionReference get collection =>
@@ -228,7 +228,6 @@ class TeamEventsRecordDocumentEquality implements Equality<TeamEventsRecord> {
         e1?.team2 == e2?.team2 &&
         e1?.eventDate == e2?.eventDate &&
         e1?.eventLocation == e2?.eventLocation &&
-        listEquality.equals(e1?.images, e2?.images) &&
         listEquality.equals(e1?.videos, e2?.videos) &&
         listEquality.equals(e1?.goals, e2?.goals) &&
         listEquality.equals(e1?.corners, e2?.corners) &&
@@ -242,7 +241,8 @@ class TeamEventsRecordDocumentEquality implements Equality<TeamEventsRecord> {
         e1?.lastStartTime == e2?.lastStartTime &&
         e1?.startTime == e2?.startTime &&
         e1?.endTime == e2?.endTime &&
-        e1?.matchResult == e2?.matchResult;
+        e1?.matchResult == e2?.matchResult &&
+        listEquality.equals(e1?.images, e2?.images);
   }
 
   @override
@@ -251,7 +251,6 @@ class TeamEventsRecordDocumentEquality implements Equality<TeamEventsRecord> {
         e?.team2,
         e?.eventDate,
         e?.eventLocation,
-        e?.images,
         e?.videos,
         e?.goals,
         e?.corners,
@@ -265,7 +264,8 @@ class TeamEventsRecordDocumentEquality implements Equality<TeamEventsRecord> {
         e?.lastStartTime,
         e?.startTime,
         e?.endTime,
-        e?.matchResult
+        e?.matchResult,
+        e?.images
       ]);
 
   @override

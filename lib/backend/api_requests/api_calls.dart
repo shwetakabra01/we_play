@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 import '../schema/structs/index.dart';
 
+import 'package:flutter/foundation.dart';
+
 import '/flutter_flow/flutter_flow_util.dart';
 import 'api_manager.dart';
 
@@ -12,7 +14,9 @@ const _kPrivateApiFunctionName = 'ffPrivateApiCall';
 /// Start WePlayApi Group Code
 
 class WePlayApiGroup {
-  static String baseUrl =
+  static String getBaseUrl({
+    String? jwtToken = '',
+  }) =>
       'https://us-central1-play-e84eb.cloudfunctions.net/wePlayApi/api/';
   static Map<String, String> headers = {
     'Authorization': 'Bearer [jwt_token]',
@@ -31,6 +35,10 @@ class WePlayApiGroup {
   static MakePublicCall makePublicCall = MakePublicCall();
   static CreateUserCall createUserCall = CreateUserCall();
   static UploadImageCall uploadImageCall = UploadImageCall();
+  static GenerateFaceIdCall generateFaceIdCall = GenerateFaceIdCall();
+  static GetImagesCall getImagesCall = GetImagesCall();
+  static GetImagesAWSCall getImagesAWSCall = GetImagesAWSCall();
+  static ToggleStarImageCall toggleStarImageCall = ToggleStarImageCall();
 }
 
 class GetMyEventsCall {
@@ -43,11 +51,14 @@ class GetMyEventsCall {
     bool? cancelledEvents,
     String? jwtToken = '',
   }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
     final sports = _serializeList(sportsList);
 
     return ApiManager.instance.makeApiCall(
       callName: 'Get  My Events',
-      apiUrl: '${WePlayApiGroup.baseUrl}getMyEvents',
+      apiUrl: '${baseUrl}getMyEvents',
       callType: ApiCallType.GET,
       headers: {
         'Authorization': 'Bearer ${jwtToken}',
@@ -74,9 +85,13 @@ class GetEventByIdCall {
     String? eventId = '',
     String? jwtToken = '',
   }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
     return ApiManager.instance.makeApiCall(
       callName: 'Get Event By Id',
-      apiUrl: '${WePlayApiGroup.baseUrl}getEvent/${eventId}',
+      apiUrl: '${baseUrl}getEvent/${eventId}',
       callType: ApiCallType.GET,
       headers: {
         'Authorization': 'Bearer ${jwtToken}',
@@ -103,6 +118,10 @@ class CreateEventCall {
     int? turfId,
     String? jwtToken = '',
   }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
     final ffApiRequestBody = '''
 {
   "venueId": "${venueId}",
@@ -116,7 +135,7 @@ class CreateEventCall {
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'Create Event',
-      apiUrl: '${WePlayApiGroup.baseUrl}createEvent',
+      apiUrl: '${baseUrl}createEvent',
       callType: ApiCallType.POST,
       headers: {
         'Authorization': 'Bearer ${jwtToken}',
@@ -139,9 +158,13 @@ class GetEventsCall {
     bool? mySports,
     String? jwtToken = '',
   }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
     return ApiManager.instance.makeApiCall(
       callName: 'Get Events',
-      apiUrl: '${WePlayApiGroup.baseUrl}getEvents',
+      apiUrl: '${baseUrl}getEvents',
       callType: ApiCallType.GET,
       headers: {
         'Authorization': 'Bearer ${jwtToken}',
@@ -163,9 +186,13 @@ class GetStaticDataCall {
   Future<ApiCallResponse> call({
     String? jwtToken = '',
   }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
     return ApiManager.instance.makeApiCall(
       callName: 'Get Static Data',
-      apiUrl: '${WePlayApiGroup.baseUrl}getStaticData',
+      apiUrl: '${baseUrl}getStaticData',
       callType: ApiCallType.GET,
       headers: {
         'Authorization': 'Bearer ${jwtToken}',
@@ -185,9 +212,13 @@ class JoinEventCall {
     String? eventId = '',
     String? jwtToken = '',
   }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
     return ApiManager.instance.makeApiCall(
       callName: 'Join Event',
-      apiUrl: '${WePlayApiGroup.baseUrl}joinEvent/${eventId}',
+      apiUrl: '${baseUrl}joinEvent/${eventId}',
       callType: ApiCallType.PUT,
       headers: {
         'Authorization': 'Bearer ${jwtToken}',
@@ -208,9 +239,13 @@ class LeaveEventCall {
     String? eventId = '',
     String? jwtToken = '',
   }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
     return ApiManager.instance.makeApiCall(
       callName: 'Leave Event',
-      apiUrl: '${WePlayApiGroup.baseUrl}leaveEvent/${eventId}',
+      apiUrl: '${baseUrl}leaveEvent/${eventId}',
       callType: ApiCallType.PUT,
       headers: {
         'Authorization': 'Bearer ${jwtToken}',
@@ -232,6 +267,10 @@ class RemoveParticipantCall {
     String? userId = '',
     String? jwtToken = '',
   }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
     final ffApiRequestBody = '''
 {
   "eventId": "${eventId}",
@@ -239,7 +278,7 @@ class RemoveParticipantCall {
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'Remove Participant',
-      apiUrl: '${WePlayApiGroup.baseUrl}removeParticipant',
+      apiUrl: '${baseUrl}removeParticipant',
       callType: ApiCallType.POST,
       headers: {
         'Authorization': 'Bearer ${jwtToken}',
@@ -261,9 +300,13 @@ class CancelEventCall {
     String? eventId = '',
     String? jwtToken = '',
   }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
     return ApiManager.instance.makeApiCall(
       callName: 'Cancel Event',
-      apiUrl: '${WePlayApiGroup.baseUrl}cancelEvent/${eventId}',
+      apiUrl: '${baseUrl}cancelEvent/${eventId}',
       callType: ApiCallType.DELETE,
       headers: {
         'Authorization': 'Bearer ${jwtToken}',
@@ -282,9 +325,13 @@ class TestSchedulerCall {
   Future<ApiCallResponse> call({
     String? jwtToken = '',
   }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
     return ApiManager.instance.makeApiCall(
       callName: 'test scheduler',
-      apiUrl: '${WePlayApiGroup.baseUrl}testSchedular',
+      apiUrl: '${baseUrl}testSchedular',
       callType: ApiCallType.GET,
       headers: {
         'Authorization': 'Bearer ${jwtToken}',
@@ -303,9 +350,13 @@ class GetVenuesCall {
   Future<ApiCallResponse> call({
     String? jwtToken = '',
   }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
     return ApiManager.instance.makeApiCall(
       callName: 'Get Venues',
-      apiUrl: '${WePlayApiGroup.baseUrl}getVenues',
+      apiUrl: '${baseUrl}getVenues',
       callType: ApiCallType.GET,
       headers: {
         'Authorization': 'Bearer ${jwtToken}',
@@ -325,9 +376,13 @@ class MakePublicCall {
     String? eventId = '',
     String? jwtToken = '',
   }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
     return ApiManager.instance.makeApiCall(
       callName: 'Make Public',
-      apiUrl: '${WePlayApiGroup.baseUrl}makePublic/${eventId}',
+      apiUrl: '${baseUrl}makePublic/${eventId}',
       callType: ApiCallType.PUT,
       headers: {
         'Authorization': 'Bearer ${jwtToken}',
@@ -354,6 +409,10 @@ class CreateUserCall {
     String? profilePic = '',
     String? jwtToken = '',
   }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
     final ffApiRequestBody = '''
 {
   "displayName": "${displayName}",
@@ -366,7 +425,7 @@ class CreateUserCall {
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'Create User',
-      apiUrl: '${WePlayApiGroup.baseUrl}createUser',
+      apiUrl: '${baseUrl}createUser',
       callType: ApiCallType.POST,
       headers: {
         'Authorization': 'Bearer ${jwtToken}',
@@ -396,16 +455,143 @@ class UploadImageCall {
   Future<ApiCallResponse> call({
     String? file = '',
     String? fileName = '',
+    String? teamEventId = '',
     String? jwtToken = '',
   }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
     final ffApiRequestBody = '''
 {
   "fileData": "${file}",
-  "fileName": "${fileName}"
+  "fileName": "${fileName}",
+  "teamEventId": "${teamEventId}"
 }''';
     return ApiManager.instance.makeApiCall(
       callName: 'Upload Image',
-      apiUrl: '${WePlayApiGroup.baseUrl}uploadImage',
+      apiUrl: '${baseUrl}uploadImage',
+      callType: ApiCallType.POST,
+      headers: {
+        'Authorization': 'Bearer ${jwtToken}',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class GenerateFaceIdCall {
+  Future<ApiCallResponse> call({
+    String? fileName = '',
+    String? fileData = '',
+    String? userId = '',
+    String? jwtToken = '',
+  }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
+    final ffApiRequestBody = '''
+{
+  "fileData": "${fileData}",
+  "fileName": "${fileName}",
+  "userId": "${userId}"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'Generate Face Id',
+      apiUrl: '${baseUrl}generateFaceId',
+      callType: ApiCallType.POST,
+      headers: {
+        'Authorization': 'Bearer ${jwtToken}',
+      },
+      params: {},
+      body: ffApiRequestBody,
+      bodyType: BodyType.JSON,
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class GetImagesCall {
+  Future<ApiCallResponse> call({
+    String? type = '',
+    String? jwtToken = '',
+  }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'Get Images',
+      apiUrl: '${baseUrl}getImages',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': 'Bearer ${jwtToken}',
+      },
+      params: {
+        'type': type,
+      },
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class GetImagesAWSCall {
+  Future<ApiCallResponse> call({
+    String? jwtToken = '',
+  }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
+    return ApiManager.instance.makeApiCall(
+      callName: 'getImages AWS',
+      apiUrl: '${baseUrl}/getImagesfromAWS',
+      callType: ApiCallType.GET,
+      headers: {
+        'Authorization': 'Bearer ${jwtToken}',
+      },
+      params: {},
+      returnBody: true,
+      encodeBodyUtf8: false,
+      decodeUtf8: false,
+      cache: false,
+      alwaysAllowBody: false,
+    );
+  }
+}
+
+class ToggleStarImageCall {
+  Future<ApiCallResponse> call({
+    String? imageId = '',
+    String? jwtToken = '',
+  }) async {
+    final baseUrl = WePlayApiGroup.getBaseUrl(
+      jwtToken: jwtToken,
+    );
+
+    final ffApiRequestBody = '''
+{
+  "imageId": "${imageId}"
+}''';
+    return ApiManager.instance.makeApiCall(
+      callName: 'toggle Star Image',
+      apiUrl: '${baseUrl}toggleStarImage',
       callType: ApiCallType.POST,
       headers: {
         'Authorization': 'Bearer ${jwtToken}',
@@ -510,6 +696,9 @@ String _serializeList(List? list) {
   try {
     return json.encode(list);
   } catch (_) {
+    if (kDebugMode) {
+      print("List serialization failed. Returning empty list.");
+    }
     return '[]';
   }
 }
@@ -519,6 +708,9 @@ String _serializeJson(dynamic jsonVar, [bool isList = false]) {
   try {
     return json.encode(jsonVar);
   } catch (_) {
+    if (kDebugMode) {
+      print("Json serialization failed. Returning empty json.");
+    }
     return isList ? '[]' : '{}';
   }
 }

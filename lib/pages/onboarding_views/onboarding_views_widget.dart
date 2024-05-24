@@ -49,6 +49,8 @@ class _OnboardingViewsWidgetState extends State<OnboardingViewsWidget> {
     authManager.handlePhoneAuthStateChanges(context);
     _model.optTextTextController ??= TextEditingController();
     _model.optTextFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

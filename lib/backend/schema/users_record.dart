@@ -112,6 +112,21 @@ class UsersRecord extends FirestoreRecord {
   String get title => _title ?? '';
   bool hasTitle() => _title != null;
 
+  // "userFaceRef" field.
+  DocumentReference? _userFaceRef;
+  DocumentReference? get userFaceRef => _userFaceRef;
+  bool hasUserFaceRef() => _userFaceRef != null;
+
+  // "faceId" field.
+  String? _faceId;
+  String get faceId => _faceId ?? '';
+  bool hasFaceId() => _faceId != null;
+
+  // "starImages" field.
+  List<String>? _starImages;
+  List<String> get starImages => _starImages ?? const [];
+  bool hasStarImages() => _starImages != null;
+
   void _initializeFields() {
     _email = snapshotData['email'] as String?;
     _displayName = snapshotData['display_name'] as String?;
@@ -132,6 +147,9 @@ class UsersRecord extends FirestoreRecord {
     _lastActiveTime = snapshotData['last_active_time'] as DateTime?;
     _role = snapshotData['role'] as String?;
     _title = snapshotData['title'] as String?;
+    _userFaceRef = snapshotData['userFaceRef'] as DocumentReference?;
+    _faceId = snapshotData['faceId'] as String?;
+    _starImages = getDataList(snapshotData['starImages']);
   }
 
   static CollectionReference get collection =>
@@ -185,6 +203,8 @@ Map<String, dynamic> createUsersRecordData({
   DateTime? lastActiveTime,
   String? role,
   String? title,
+  DocumentReference? userFaceRef,
+  String? faceId,
 }) {
   final firestoreData = mapToFirestore(
     <String, dynamic>{
@@ -205,6 +225,8 @@ Map<String, dynamic> createUsersRecordData({
       'last_active_time': lastActiveTime,
       'role': role,
       'title': title,
+      'userFaceRef': userFaceRef,
+      'faceId': faceId,
     }.withoutNulls,
   );
 
@@ -235,7 +257,10 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e1?.shortDescription == e2?.shortDescription &&
         e1?.lastActiveTime == e2?.lastActiveTime &&
         e1?.role == e2?.role &&
-        e1?.title == e2?.title;
+        e1?.title == e2?.title &&
+        e1?.userFaceRef == e2?.userFaceRef &&
+        e1?.faceId == e2?.faceId &&
+        listEquality.equals(e1?.starImages, e2?.starImages);
   }
 
   @override
@@ -258,7 +283,10 @@ class UsersRecordDocumentEquality implements Equality<UsersRecord> {
         e?.shortDescription,
         e?.lastActiveTime,
         e?.role,
-        e?.title
+        e?.title,
+        e?.userFaceRef,
+        e?.faceId,
+        e?.starImages
       ]);
 
   @override

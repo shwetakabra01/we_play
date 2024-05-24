@@ -200,6 +200,19 @@ final parametersBuilderMap =
               data, 'chatMessage', ChatMessagesRecord.fromSnapshot),
         },
       ),
+  'Collections': ParameterData.none(),
+  'Gallery': (data) async => ParameterData(
+        allParams: {
+          'title': getParameter<String>(data, 'title'),
+          'queryType': getParameter<String>(data, 'queryType'),
+        },
+      ),
+  'GalleryCopy': (data) async => ParameterData(
+        allParams: {
+          'title': getParameter<String>(data, 'title'),
+          'queryType': getParameter<String>(data, 'queryType'),
+        },
+      ),
 };
 
 Map<String, dynamic> getInitialParameterData(Map<String, dynamic> data) {

@@ -369,7 +369,7 @@ class _FixtureDetailsWidgetState extends State<FixtureDetailsWidget>
                                                             ),
                                                             FlutterFlowTimer(
                                                               initialTime: _model
-                                                                  .timerMilliseconds,
+                                                                  .timerInitialTimeMs,
                                                               getDisplayTime: (value) =>
                                                                   StopWatchTimer
                                                                       .getDisplayTime(
@@ -3694,6 +3694,9 @@ class _FixtureDetailsWidgetState extends State<FixtureDetailsWidget>
                                                                             currentJwtToken,
                                                                         fileName:
                                                                             functions.getFileName(_model.uploadedLocalFile1),
+                                                                        teamEventId: widget
+                                                                            .fixtureRef
+                                                                            ?.id,
                                                                       );
                                                                       if (_model.uploadedFileUrl2 !=
                                                                               null &&

@@ -41,6 +41,8 @@ class _ScoreGoalWidgetState extends State<ScoreGoalWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => ScoreGoalModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

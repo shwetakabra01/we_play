@@ -77,6 +77,8 @@ class _UpdateTeamWidgetState extends State<UpdateTeamWidget> {
     _model.drawTxtTextController ??=
         TextEditingController(text: widget.team?.draw?.toString());
     _model.drawTxtFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

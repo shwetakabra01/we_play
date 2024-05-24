@@ -35,6 +35,8 @@ class _CreateTeamWidgetState extends State<CreateTeamWidget> {
 
     _model.teamOwnerTextController ??= TextEditingController();
     _model.teamOwnerFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

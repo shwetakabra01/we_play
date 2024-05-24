@@ -35,6 +35,7 @@ class _FixturesWidgetState extends State<FixturesWidget>
       length: 2,
       initialIndex: 0,
     )..addListener(() => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

@@ -9,6 +9,7 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'dart:math';
 import '/backend/schema/structs/index.dart';
 import '/flutter_flow/custom_functions.dart' as functions;
 import 'package:aligned_dialog/aligned_dialog.dart';
@@ -68,6 +69,8 @@ class _GameInfoWidgetState extends State<GameInfoWidget>
         ],
       ),
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -351,10 +354,12 @@ class _GameInfoWidgetState extends State<GameInfoWidget>
                                                                       CarouselController(),
                                                               options:
                                                                   CarouselOptions(
-                                                                initialPage: min(
-                                                                    1,
-                                                                    photos.length -
-                                                                        1),
+                                                                initialPage: max(
+                                                                    0,
+                                                                    min(
+                                                                        1,
+                                                                        photos.length -
+                                                                            1)),
                                                                 viewportFraction:
                                                                     1.0,
                                                                 disableCenter:

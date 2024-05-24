@@ -82,6 +82,8 @@ class _VenueBookingWidgetState extends State<VenueBookingWidget> {
 
     _model.participantsTextController ??= TextEditingController();
     _model.participantsFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

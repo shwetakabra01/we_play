@@ -32,6 +32,8 @@ class _CarouselPhotosWidgetState extends State<CarouselPhotosWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => CarouselPhotosModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -66,7 +68,7 @@ class _CarouselPhotosWidgetState extends State<CarouselPhotosWidget> {
             carouselController: _model.carouselController ??=
                 CarouselController(),
             options: CarouselOptions(
-              initialPage: min(1, photos.length - 1),
+              initialPage: max(0, min(1, photos.length - 1)),
               viewportFraction: 1.0,
               disableCenter: true,
               enlargeCenterPage: true,

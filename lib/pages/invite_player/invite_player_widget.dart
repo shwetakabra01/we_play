@@ -60,6 +60,8 @@ class _InvitePlayerWidgetState extends State<InvitePlayerWidget> {
       '0',
     ));
     _model.guestsFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

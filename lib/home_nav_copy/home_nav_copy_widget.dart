@@ -51,6 +51,8 @@ class _HomeNavCopyWidgetState extends State<HomeNavCopyWidget> {
         context.pushNamed('OnboardingViewsLoggedIn');
       }
     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

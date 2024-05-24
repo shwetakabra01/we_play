@@ -40,6 +40,7 @@ class _TeamDetailsWidgetState extends State<TeamDetailsWidget> {
         ExpandableController(initialExpanded: false);
     _model.expandableExpandableController3 =
         ExpandableController(initialExpanded: false);
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override

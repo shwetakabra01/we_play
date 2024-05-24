@@ -25,3 +25,6 @@ export '/chat/chat_2_main/chat2_main_widget.dart' show Chat2MainWidget;
 export '/chat/chat_2_invite_users/chat2_invite_users_widget.dart'
     show Chat2InviteUsersWidget;
 export '/chat/image_details/image_details_widget.dart' show ImageDetailsWidget;
+export '/pages/collections/collections_widget.dart' show CollectionsWidget;
+export '/pages/gallery/gallery_widget.dart' show GalleryWidget;
+export '/pages/gallery_copy/gallery_copy_widget.dart' show GalleryCopyWidget;

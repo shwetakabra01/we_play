@@ -81,6 +81,7 @@ class _OnboardingViewsLoggedInWidgetState
         TextEditingController(text: currentUserDisplayName);
     _model.fullNameFocusNode ??= FocusNode();
     _model.fullNameFocusNode!.addListener(() => setState(() {}));
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
