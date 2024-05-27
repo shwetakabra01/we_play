@@ -112,7 +112,7 @@ class _FixturesWidgetState extends State<FixturesWidget>
                                 text: 'Fixtures',
                               ),
                               Tab(
-                                text: 'Point Tables',
+                                text: 'Tables',
                               ),
                             ],
                             controller: _model.tabBarController,
