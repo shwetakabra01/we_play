@@ -102,7 +102,7 @@ class NavBarPage extends StatefulWidget {
 
 /// This is the private State class that goes with NavBarPage.
 class _NavBarPageState extends State<NavBarPage> {
-  String _currentPageName = 'HomeNav';
+  String _currentPageName = 'HomeNavCopy';
   late Widget? _currentPage;
 
   @override
@@ -115,7 +115,7 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'HomeNav': HomeNavWidget(),
+      'HomeNavCopy': HomeNavCopyWidget(),
       'Play': PlayWidget(),
       'Venues': VenuesWidget(),
       'chat_2_main': Chat2MainWidget(),
@@ -141,6 +141,10 @@ class _NavBarPageState extends State<NavBarPage> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.home_outlined,
+              size: 24.0,
+            ),
+            activeIcon: Icon(
+              Icons.home,
               size: 24.0,
             ),
             label: 'Home',

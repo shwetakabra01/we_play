@@ -123,9 +123,7 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'HomeNav',
           path: '/homeNav',
           requireAuth: true,
-          builder: (context, params) => params.isEmpty
-              ? NavBarPage(initialPage: 'HomeNav')
-              : HomeNavWidget(),
+          builder: (context, params) => HomeNavWidget(),
         ),
         FFRoute(
           name: 'Play',
@@ -293,7 +291,9 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           name: 'HomeNavCopy',
           path: '/homeNavCopy',
           requireAuth: true,
-          builder: (context, params) => HomeNavCopyWidget(),
+          builder: (context, params) => params.isEmpty
+              ? NavBarPage(initialPage: 'HomeNavCopy')
+              : HomeNavCopyWidget(),
         ),
         FFRoute(
           name: 'chat_2_Details',

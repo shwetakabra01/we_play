@@ -544,7 +544,8 @@ class _OnboardingViewsWidgetState extends State<OnboardingViewsWidget> {
                                 return;
                               }
 
-                              context.goNamedAuth('HomeNav', context.mounted);
+                              context.goNamedAuth(
+                                  'HomeNavCopy', context.mounted);
                             },
                             text: 'Continue',
                             options: FFButtonOptions(
